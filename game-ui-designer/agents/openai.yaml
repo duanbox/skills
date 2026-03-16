@@ -1,0 +1,4 @@
+interface:
+  display_name: "Game UI Designer"
+  short_description: "HUD, menu, inventory, shop, and tutorial UI design guidance."
+  default_prompt: "Use $game-ui-designer to design or review a game HUD, menu, inventory, shop, or tutorial flow."

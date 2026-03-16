@@ -1,0 +1,454 @@
+---
+name: scripting-best-practices
+description: Naninovel .nani 脚本编写规范与 C# 集成模式（基于官方文档 https://naninovel.com/guide/）
+metadata:
+  tags: naninovel, scripting, integration, best-practices
+---
+
+# Naninovel 脚本规范与集成模式
+
+> **参考文档**：https://naninovel.com/guide/scenario-scripting
+> **最后校对**：2026-02-19（基于官方文档实时验证）
+
+---
+
+## 一、脚本语法基础
+
+### 行类型
+
+| 起始符 | 类型 | 示例 |
+|--------|------|------|
+| `@` | 命令行 | `@back MainBg` |
+| `#` | 标签行 | `# MyLabel` |
+| `;` | 注释行 | `; 这是注释` |
+| 无 | 对话/文本行 | `Xihe: 你好。` |
+
+### 命令语法
+
+```nani
+@commandId paramId:paramValue
+
+; 多个参数
+@char Kohaku pos:0.5 time:0.3
+
+; 字符串含空格须加引号
+@print "Hello World"
+```
+
+### 参数值类型
+
+| 类型 | 示例 |
+|------|------|
+| String | `SimpleText` / `"Text with spaces"` |
+| Integer | `1`, `-25` |
+| Decimal | `1.0`, `-0.005` |
+| Boolean | `true` / `false` |
+| Named | `Script001.LabelName` |
+| List | `item1,item2,"item three"` |
+
+### 布尔标志简写 ✅
+
+```nani
+; 以下两行等价
+@char Kohaku visible:true
+@char Kohaku visible!
+
+; 以下两行等价
+@char Kohaku visible:false
+@char Kohaku !visible
+```
+
+---
+
+## 二、对话与文本
+
+### 标准对话格式
+
+```nani
+; 格式：角色ID.外观: 台词
+Xihe.Happy: 今天天气不错。
+Kohaku: 是的，阳光明媚。
+```
+
+### 内联命令（命令注入文本中）
+
+```nani
+; 在文本中间触发命令
+Felix: Lorem[char Felix.Happy pos:0.5] ipsum![sfx Explosion] dolor.
+
+; 跳过当前输入等待
+Xihe: 这句话不需要点击。[>]
+```
+
+### 文本标识符 `|#N|`
+
+```nani
+; ✅ 合法语法，由编译器自动生成，用于本地化和配音绑定
+Kohaku: Hello!|#1| What's up?|#2|
+
+; 引用已有标识符（避免重复翻译）
+@print |#&SOMEID|
+```
+
+> **规则**：不要手动添加或删除 `|#N|`。这些标识符由 Naninovel 的脚本编译器自动维护，
+> 删除它们会破坏本地化和配音关联。如需运行本地化前生成，使用 "Insert Line Keys" 工具。
+
+---
+
+## 三、标签与导航
+
+### 标签定义
+
+```nani
+# MyLabel
+; 标签后的内容
+```
+
+### `@goto` 跳转语法
+
+```nani
+; 同脚本内跳转（本地标签）
+@goto #MyLabel
+
+; 跨脚本跳转（规范路径，从 Scenario 根目录）
+@goto CommonRoute/Day1/Scene1#Action
+
+; 相对路径
+@goto ./Scene2
+@goto ../Day2/Scene1
+
+; 通配符（脚本名唯一时可用）
+@goto */Prologue
+
+; 跳转到脚本开头（无标签）
+@goto AnotherScript
+```
+
+---
+
+## 四、条件系统
+
+### 单行条件
+
+```nani
+; 所有命令都支持 if / unless 参数
+@choice "选项A" if:score>9000
+@print "存活" unless:dead
+
+; 复杂条件用花括号
+@bgm Victory if:{ score > 10 | cleared }
+```
+
+### 条件块（嵌套，4空格缩进）
+
+```nani
+@if score>10
+    @bgm Victory
+    任务完成！
+@else if:score>5
+    还差一点。
+@else
+    任务失败。
+```
+
+### 内联条件（文本中）
+
+```nani
+结果：[if score>8] 完美！[else] 还不错。[endif]
+```
+
+---
+
+## 五、变量系统
+
+### `@set` 赋值
+
+```nani
+; 普通赋值
+@set score=1
+@set PlayerName="Felix"
+
+; 自增
+@set g_TotalRuns++
+
+; 默认赋值（仅当变量未设置时）
+@set name?="Alex"
+@set g_ClearedRoute?=false
+```
+
+### 变量注入
+
+```nani
+; 在文本和参数中使用 {} 注入变量
+@set PlayerName="Felix"
+Archibald: 你好，{PlayerName}！
+@char {PlayerName} pos:50
+```
+
+### 变量命名规则（与 CLAUDE.md 一致）
+
+| 前缀 | 存档类型 | 用途 |
+|------|---------|------|
+| 无前缀 | GameSave（per-slot） | 当前游戏进度、场景状态 |
+| `g_` / `G_` | GlobalSave（全局） | 跨存档持久数据，如 `g_FinishedMainRoute` |
+
+---
+
+## 六、异步执行
+
+### wait 参数
+
+```nani
+; 等待命令完成后再继续
+@hide Kohaku wait!
+@show Yuko
+```
+
+### 并发轨道（@async / @await / @stop）
+
+```nani
+; 开启命名异步轨道（loop! 表示循环）
+@async AmbientLoop loop!
+    @spawn RainEffect
+    @wait 2
+
+; 等待异步轨道完成
+@await AmbientLoop
+
+; 停止并立即完成
+@await CombatAnim complete!
+
+; 停止轨道
+@stop AmbientLoop
+```
+
+### @sync（强制同步点）
+
+```nani
+; 确保所有并发轨道在此点汇合
+@sync
+```
+
+---
+
+## 七、Title Script
+
+特殊脚本，引擎初始化后自动播放，通过标签响应玩家操作：
+
+```nani
+@back MainBackground
+@bgm MenuMusic
+@show TitleUI
+@stop
+
+# OnNewGame
+@sfx NewGameSFX
+@stopBgm wait!
+@stop
+
+# OnLoad
+; 玩家选择存档后执行
+
+# OnExit
+; 玩家点击退出后执行
+```
+
+---
+
+## 八、C# 集成：逻辑/表现分离
+
+### 核心原则
+
+```
+Naninovel .nani  →  表现层（UI、对话、背景、音效）
+C# Managers      →  逻辑层（战斗、背包、地图状态）
+
+通信方向：
+  Naninovel → C#：自定义 Command 类（@myCommand）
+  C# → Naninovel：Engine.GetService<IScriptPlayer>()
+```
+
+### 从 C# 播放脚本
+
+```csharp
+// ✅ 当前 API（Naninovel 最新版）
+var player = Engine.GetService<IScriptPlayer>();
+await player.MainTrack.LoadAndPlay("Script001");
+
+// 跳转到标签
+await player.MainTrack.LoadAndPlay("Script001", "MyLabel");
+```
+
+### 等待脚本播放完成
+
+```csharp
+var player = Engine.GetService<IScriptPlayer>();
+var tcs = new UniTaskCompletionSource();
+
+System.Action<Script> onStop = _ => tcs.TrySetResult();
+player.OnStop += onStop;
+
+try
+{
+    await player.MainTrack.LoadAndPlay(scriptName);
+    await tcs.Task;
+}
+finally
+{
+    player.OnStop -= onStop;
+}
+```
+
+### 初始化检查（异步）
+
+```csharp
+// Naninovel 初始化是异步的，Awake/Start 中不可直接调用
+if (Engine.Initialized) DoWork();
+else Engine.OnInitializationFinished += DoWork;
+```
+
+### 手动初始化（非自动启动场景）
+
+```csharp
+await RuntimeInitializer.Initialize();
+```
+
+### 重置引擎状态（返回游戏时）
+
+```csharp
+var stateManager = Engine.GetService<IStateManager>();
+await stateManager.ResetState();
+```
+
+---
+
+## 九、项目特定集成（EndGods）
+
+### NaninovelBridge 模式（地图↔对话切换）
+
+```csharp
+// 进入对话模式
+await NaninovelBridge.Instance.EnterNovelMode(
+    scriptName,
+    label: null,
+    hideMapWorld: true,
+    forcesTransparency: false
+);
+
+// 地牢对话叠加模式（保留背景）
+await NaninovelBridge.Instance.EnterNovelMode(
+    scriptName,
+    label: null,
+    hideMapWorld: false,
+    forcesTransparency: true
+);
+
+// 退出对话模式
+await ExitStoryMode();
+```
+
+### MainCameraLookContainer 管理
+
+```csharp
+// 进入对话：显示 Naninovel 渲染层
+SetMainCameraLookContainerActive(true);
+
+// 回到地图/游戏：隐藏（防止遮挡游戏世界）
+SetMainCameraLookContainerActive(false);
+```
+
+### AudioListener 冲突处理
+
+```csharp
+// 进入对话时：禁用 Map Camera 的 AudioListener
+SetMapAudioListenerActive(false);
+
+// 退出对话时：重新启用
+SetMapAudioListenerActive(true);
+```
+
+### ContinueInputUI 管理（防止阻挡游戏点击）
+
+```csharp
+private void OnScriptPlay(Script script) => SetNaninovelInputVisible(true);
+private void OnScriptStop(Script script) => SetNaninovelInputVisible(false);
+
+private void SetNaninovelInputVisible(bool visible)
+{
+    var uiManager = Engine.GetService<IUIManager>();
+    var continueUI = uiManager?.GetUI("ContinueInputUI");
+    if (continueUI != null) continueUI.Visible = visible;
+}
+```
+
+---
+
+## 十、常用命令速查
+
+```nani
+; 背景
+@back BackgroundName
+@back BackgroundName tint:#FF0000 time:0.5
+
+; 角色
+@char CharacterID
+@char CharacterID.HappyFace pos:0.5 time:0.3 wait!
+
+; 音频
+@bgm MusicTrack
+@bgm MusicTrack volume:0.8
+@stopBgm time:1.5
+@sfx SoundEffect
+
+; 流程控制
+@stop                    ; 等待玩家点击
+@wait 1.5               ; 等待 1.5 秒
+@goto #MyLabel           ; 跳转到当前脚本标签
+@goto OtherScript#Label  ; 跳转到其他脚本标签
+
+; 变量
+@set score=10
+@set g_Cleared=true
+@set name?="默认名"
+
+; 条件
+@if score>10
+    通过！
+@else
+    失败。
+
+; 选项
+@choice "选项A" goto:#OptionA
+@choice "选项B" goto:#OptionB
+```
+
+---
+
+## 十一、常见问题排查
+
+| 现象 | 原因 | 解决 |
+|------|------|------|
+| 对话自动推进 | 缺少 `@stop` | 在需要暂停处添加 `@stop` |
+| 黑屏 | `MainCameraLookContainer` 被禁用 | 确认进入对话时已 `SetActive(true)` |
+| 对话框不响应点击 | `ContinueInputUI` 未显示 | 确认 `OnScriptPlay` 事件已连接 |
+| 脚本不播放 | 脚本名/路径错误 | 路径区分大小写，确认在 Scenario 根下 |
+| AudioListener 警告 | 两个摄像机同时启用 | 在 `EnterNovelMode` 时禁用 Map 摄像机的 Listener |
+
+---
+
+## 十二、提交前检查
+
+```
+.nani 脚本：
+- [ ] 不要手动添加/删除 |#N| 标识符（由编译器管理）
+- [ ] 对话暂停点已有 @stop
+- [ ] @goto 使用 #Label 格式（同脚本）
+- [ ] 角色 ID 与配置匹配（区分大小写）
+- [ ] 资产（背景/音乐）已存在并配置
+
+C# 集成：
+- [ ] 使用 player.MainTrack.LoadAndPlay(...)（非旧版直接调用）
+- [ ] Engine.Initialized 检查或订阅 OnInitializationFinished
+- [ ] IStateManager.ResetState() 在返回游戏时调用
+- [ ] 自定义 Command 见 custom-commands.md 规范
+```
