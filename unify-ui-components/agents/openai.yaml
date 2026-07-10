@@ -1,0 +1,4 @@
+interface:
+  display_name: "Unify UI Components"
+  short_description: "Audit and unify shared EndGods UI component families"
+  default_prompt: "Use $unify-ui-components to audit repeated UI components across EndGods screens and propose a canonical family."

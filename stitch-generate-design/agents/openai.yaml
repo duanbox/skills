@@ -1,0 +1,15 @@
+interface:
+  display_name: "Stitch Generate Design"
+  short_description: "Generate and refine Stitch design explorations"
+  default_prompt: "Use $stitch-generate-design to generate a Stitch screen exploration from this brief while preserving downstream design and implementation authority."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "stitch"
+      description: "Google Stitch MCP server with screen generation, editing, and variant tools"
+      transport: "streamable_http"
+      url: "https://stitch.googleapis.com/mcp"
+
+policy:
+  allow_implicit_invocation: true

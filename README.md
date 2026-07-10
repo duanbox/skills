@@ -5,7 +5,7 @@ This directory is the single global source for EndGods skills distributed by ski
 ## Current baseline
 
 - skillshare CLI and bundled skill: `v0.20.21`
-- shared skills: 27
+- shared skills: 31
 - targets: antigravity, claude, codex, cursor, gemini, grok, kilocode, opencode, trae
 - target mode: copy, except grok uses merge
 - project rules and workflows are separate extras; they are not skills
@@ -42,6 +42,7 @@ Domain and implementation:
 - `game-ui-designer`
 - `naninovel`
 - `ui-ux`
+- `unify-ui-components`
 - `unity-animation`
 - `vn-game-systems`
 
@@ -55,6 +56,9 @@ Asset and media:
 External tooling:
 
 - `skillshare`
+- `stitch-design-md`
+- `stitch-generate-design`
+- `stitch-manage-design-system`
 
 ## Skill authoring rules
 
@@ -94,7 +98,7 @@ $py = 'D:\Project\EndGods\Tools\venv\Scripts\python.exe'
 
 Run `quick_validate.py` with `PYTHONUTF8=1` on Windows. Treat only the compatibility names above and the pinned upstream `skillshare` schema extension as documented validator exceptions.
 
-After sync, every target must contain the same 27 shared skill trees. Grok additionally keeps its native local skills; `diff --json` may describe those as local-only removals even though merge mode intentionally preserves them.
+After sync, every target must contain the same 31 shared skill trees. Grok additionally keeps its native local skills; `diff --json` may describe those as local-only removals even though merge mode intentionally preserves them.
 
 Grok-local skills are outside this repository. Never collect them into the central source or include them in public commits.
 

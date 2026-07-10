@@ -1,0 +1,15 @@
+interface:
+  display_name: "Stitch Manage Design System"
+  short_description: "Manage Stitch systems with approval gates"
+  default_prompt: "Use $stitch-manage-design-system to inspect this Stitch project's design system and prepare an approval-gated update for the selected screens."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "stitch"
+      description: "Google Stitch MCP server with design-system management tools"
+      transport: "streamable_http"
+      url: "https://stitch.googleapis.com/mcp"
+
+policy:
+  allow_implicit_invocation: true

@@ -1,19 +1,19 @@
 ---
 name: game-ui-designer
-description: Design and review EndGods player-facing interfaces. Use when deciding or auditing screen hierarchy, flow, navigation, accessibility, feedback, economy clarity, or onboarding.
+description: Design and review EndGods player-facing interfaces and prepare implementation-ready handoffs. Use when deciding or auditing screen hierarchy, flow, navigation, accessibility, feedback, economy clarity, onboarding, or player-visible states. Do not use for Unity Scene/Prefab implementation or bitmap production.
 ---
 
 # Game UI Designer
 
 ## Overview
 
-Use this skill for gameplay-facing interface design and implementation guidance. It is optimized for fast decisions on hierarchy, interaction cost, readability under pressure, controller navigation, economy surfaces, and tutorial pacing.
+Use this skill for gameplay-facing interface design and implementation-ready handoffs. It is optimized for fast decisions on hierarchy, interaction cost, readability under pressure, controller navigation, economy surfaces, and tutorial pacing; it does not own Unity implementation.
 
 ## Use This Skill
 
 - Designing or refactoring HUD, crosshair, ability bars, health bars, boss frames, minimaps, quest trackers, or combat notifications
 - Building main menu, pause menu, settings, map, codex, quest log, or game over flows
-- Designing inventory, equipment, crafting, loot, vendor, gacha, or in-game shop screens
+- Designing inventory, equipment, loot, vendor, or other economy screens already authorized by current project specifications
 - Building first-time user experience, tutorials, hints, or guided onboarding
 - Reviewing a game UI implementation for clarity, friction, accessibility, or production readiness
 
@@ -49,7 +49,17 @@ Decide which primary surface the task belongs to:
 
 Then read only the matching reference file under `references/`.
 
-### 2. Identify Player Context
+### 2. Enter the EndGods Authority Gate
+
+Before recommending layouts, assets, or implementation details for EndGods:
+
+1. Read `AGENTS.md` and the UI routes in `Docs/INDEX.md`.
+2. Read `Docs/Pipeline/ui-vibe-coding-pipeline.md` and `Docs/rules/rules_ui.md`.
+3. When bitmaps, UI art, imports, or generated assets are involved, also read `Docs/rules/rules_assets.md` and `Docs/rules/rules_resources.md`.
+
+Use those files as current authority instead of copying their values or procedures into this skill.
+
+### 3. Identify Player Context
 
 Before proposing layouts or code, anchor the design to:
 
@@ -61,7 +71,7 @@ Before proposing layouts or code, anchor the design to:
 
 If the request is vague, infer the minimum viable assumptions and state them briefly.
 
-### 3. Produce Output in This Shape
+### 4. Produce Output in This Shape
 
 When designing or reviewing, structure the answer as:
 
@@ -139,9 +149,11 @@ This skill decides the player experience; it does not override EndGods Unity imp
 
 The implementing agent must then use the `UI & UX Design` skill, read `Docs/Pipeline/ui-vibe-coding-pipeline.md`, inspect the real Scene/Prefab and bindings, and produce the required Scene/GameView or PlayMode screenshot evidence. A design recommendation never authorizes runtime construction of final painterly components or replacement of Scene/Prefab layout authority.
 
+For every proposed visual component, classify it as a shared primitive, screen-specific asset, or temporary candidate before recommending new work. Reuse an existing finalized shared primitive first. For Unity handoff, Path A keeps static layout and painterly structure in Scene/Prefab serialization; Path B requires explicit project authority. Runtime `Normalize*` or `Ensure*` repair of static placement is not an acceptable substitute.
+
 ## Output Constraints
 
 - Prefer rules, wireframe logic, and implementation notes over lore or branding copy.
-- If the user asks for code, preserve the project's existing engine and UI framework patterns.
+- If the user asks for Unity code or implementation, finish the design handoff and route execution to `UI & UX Design`; do not implement it through this skill.
 - For Unity, mention Canvas grouping, layout hierarchy, safe area handling, event system focus, and prefab reuse where relevant.
 - If proposing animations, keep them short and stateful; avoid long tween chains that slow interaction.
