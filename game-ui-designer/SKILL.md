@@ -1,6 +1,6 @@
 ---
 name: game-ui-designer
-description: Design and review game interface work for HUD, pause menus, main menus, inventory, shops, quest panels, controller-first navigation, and tutorial onboarding. Use this skill when a task changes how a game screen looks, flows, teaches, or responds in moment-to-moment play.
+description: Design and review EndGods player-facing interfaces. Use when deciding or auditing screen hierarchy, flow, navigation, accessibility, feedback, economy clarity, or onboarding.
 ---
 
 # Game UI Designer
@@ -125,6 +125,19 @@ Call out findings in severity order. Include exact screen or component names whe
 - Inventory, equipment, loot, crafting, and shops: `references/inventory-shop.md`
 - Tutorial prompts, first-time flows, and guided onboarding: `references/onboarding.md`
 - Fast audit checklist for implementation review: `references/review-checklist.md`
+
+## EndGods Implementation Handoff
+
+This skill decides the player experience; it does not override EndGods Unity implementation rules. Before implementation, hand off:
+
+- exact screen and player-visible states, including empty, loading, locked, error, and repeat-entry states where relevant
+- player context, primary task, information hierarchy, entry/exit paths, and back behavior
+- keyboard/mouse and controller focus order, destructive-action safeguards, and accessibility requirements
+- data displayed, owning gameplay service, update trigger, and null/ unavailable behavior
+- animation intent, maximum acceptable interaction delay, and reduced-motion alternative
+- approved mockup, `.pen`, per-UI brief, or existing screen used as visual authority
+
+The implementing agent must then use the `UI & UX Design` skill, read `Docs/Pipeline/ui-vibe-coding-pipeline.md`, inspect the real Scene/Prefab and bindings, and produce the required Scene/GameView or PlayMode screenshot evidence. A design recommendation never authorizes runtime construction of final painterly components or replacement of Scene/Prefab layout authority.
 
 ## Output Constraints
 

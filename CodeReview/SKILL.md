@@ -1,49 +1,51 @@
 ---
 name: CodeReview
-description: Workflow for CodeReview
+description: Review bounded EndGods changes without editing them. Use when the user asks for a code, diff, PR, change-assessment, or merge-readiness review.
 ---
 
-# Code Review Skill
+# Code Review
 
-## Role
-You are the **Lead Code Reviewer**. Your goal is to ensure code quality, maintainability, and alignment with project architecture.
+Review is read-only by default. Do not edit code, update documentation, stage changes, or auto-fix findings unless the user explicitly requests a separate implementation pass.
 
-## Review Standards (C# & Unity)
-1.  **Architecture**:
-    *   Ensure **Separation of Concerns** (e.g., Logic vs. View).
-    *   Verify **Single Responsibility Principle** for classes.
-    *   Check specifically for **Editor vs. Runtime** logic separation (e.g., `#if UNITY_EDITOR` blocks).
+## Establish scope
 
-2.  **Performance**:
-    *   Identify expensive calls in hot paths (e.g., `GetComponent`, `FindObjectOfType`, `Instantiate` in Update loops).
-    *   Verify usage of object pooling where appropriate.
-    *   Check for async/await correctness (UniTask vs Coroutines).
+1. Read AGENTS.md and route through Docs/INDEX.md.
+2. Identify the requested files, feature, card, commit range, or working-tree diff.
+3. Preserve unrelated dirty changes and do not switch revisions in the active checkout.
+4. Read the relevant subsystem authority and two or three nearby usages or call sites.
+5. For UI, assets, TMP, combat, testing, and Unity MCP changes, read the special authority named by AGENTS.md.
 
-3.  **Readability**:
-    *   Variable naming conventions (CamelCase for locals, PascalCase for methods/properties).
-    *   Comments explaining **WHY**, not just WHAT.
-    *   Dead code removal.
+## Review order
 
-4.  **Error Handling**:
-    *   Null checks for external references.
-    *   Graceful failure modes (e.g., if a shader is missing).
+1. Requirements: confirm the change implements the actual request and does not broaden scope.
+2. Correctness: trace data, state, initialization, errors, async flow, disposal, and edge cases.
+3. Architecture: check logic/view boundaries, ServiceLocator composition boundaries, namespaces, ownership, reuse, and dependency direction.
+4. Project hard rules: check UniTask, GameLogger, TMP_Text, UIDataAsset colors, editor isolation, resource loading, and importer rules as applicable.
+5. Serialized and data contracts: inspect Scene, Prefab, CSV, ScriptableObject, resource, and Naninovel references when touched.
+6. Tests and evidence: determine whether existing tests protect intent, whether required screenshots or importer evidence exist, and whether the reported verification matches the change risk.
+7. Maintainability: flag duplication or complexity only when it creates a concrete defect, regression risk, or material maintenance cost.
 
-## 记录与同步 (Documentation Sync)
-*   **关键原则**: 所有的 Review 结论和架构更新必须汇总到 `docs/rules/rules_code_structure.md` 文件中。
-*   **语言要求**: 必须使用 **中文** 进行记录。
-*   **操作**: 每次 Review 后，更新 `rules_code_structure.md` 中相关的模块描述、逻辑说明或待办项。
+## Finding standard
 
-## Process
-1.  **Scan**: Identify modified/created files in the recent task.
-2.  **Analyze**: Read the file contents using `view_file`.
-3.  **Critique**: List specific issues or improvements.
-4.  **Action**:
-    *   If critical syntax/logic errors: **Fix immediately**.
-    *   If style/minor improvements: **Propose changes** or **Auto-fix** if safe.
-    *   If documentation is missing: **Update documentation**.
+Report only actionable findings. Every finding must include:
 
-## 输出格式 (Output Format)
-以 Markdown 格式直接更新 `docs/rules/rules_code_structure.md`：
-*   **更新摘要**: 使用中文简述本次 Review 的核心改动。
-*   **改动详情**: 在对应模块下更新逻辑说明、技术细节或注意事项。
-*   **遗留问题**: 如果有未解决的问题，记录在 `Todo` 或相关模块的“注意事项”中。
+- Priority: P0 critical, P1 high, P2 medium, or P3 low
+- Exact file and tight line range
+- The broken requirement or invariant
+- Concrete failure scenario and impact
+- Evidence from code, data, or validation state
+- Smallest appropriate correction
+
+Do not inflate severity, report formatting handled by tooling, or invent hypothetical problems without a reachable failure path.
+
+## Output
+
+Return findings first, ordered by priority. Then include:
+
+- Reviewed scope and authority documents
+- Validation evidence inspected
+- Missing or stale evidence
+- Residual risks and coverage limits
+- Verdict: ready, ready with non-blocking notes, not ready, or inconclusive
+
+If no findings exist, say so directly and still report evidence gaps. Do not modify Docs/rules/rules_code_structure.md merely because a review occurred.

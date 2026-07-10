@@ -228,7 +228,105 @@ Archibald: 你好，{PlayerName}！
 
 ---
 
-## 六、EndGods 项目约定
+## 六、变量集中管理
+
+### 6.1 Naninovel 预定义变量面板（推荐）
+
+在 Unity Editor 中通过 **Naninovel → Configuration → Custom Variables** 面板集中定义所有变量的名称和初始值。
+
+- **Local 预定义变量**：每次 state reset 时重新初始化为面板设定值
+- **Global 预定义变量**（`g_` 前缀）：仅首次启动时初始化
+- Value 字段接受脚本表达式，不是原始字符串
+
+**这是项目的变量注册中心（single source of truth）**。所有新变量必须先在此面板中注册，再在脚本中使用。
+
+**变量安全性由初始化保证**：预定义面板中注册的变量在新存档时自动初始化为默认值，脚本中 `@if` 读取时变量一定存在。因此脚本中直接写 `@if p04_mineComplete==true` 即可，**不需要** `BoolVar()`/`StringVar()` 等容错包装。如果运行时变量不存在导致卡死，说明初始化链有 bug，应该修初始化（在面板中补注册），而不是用容错函数掩盖问题。
+
+### 6.2 C# 常量对照
+
+C# 代码需要读写的变量名，在 `GameConstants.cs` 中定义常量：
+
+```csharp
+// Assets/Game/Scripts/Core/Constants/GameConstants.cs
+public const string VAR_LAST_BATTLE_VICTORY = "lastBattleVictory";
+public const string VAR_LAST_ITEM_USED      = "lastItemUsed";
+```
+
+仅 C# 代码中使用的变量才需要在此注册。纯脚本内部变量（如对话选择分支变量）只需在 Naninovel 配置面板注册即可。
+
+### 6.3 变量命名规范
+
+| 前缀 | 作用域 | 示例 | 用途 |
+|------|--------|------|------|
+| 无前缀 | GameSave（存档槽） | `p02_mineIntel` | 游戏进度、剧情分支 |
+| `g_` / `G_` | GlobalSave（跨存档） | `g_finishedPrologue` | 成就、解锁、累计统计 |
+
+命名使用 **camelCase**，只能包含拉丁字母、数字、下划线，以字母开头，不区分大小写。
+
+### 6.4 变量命名分层（必须遵守）
+
+所有变量必须带**来源前缀**，一看名字就知道归属：
+
+| 前缀格式 | 含义 | 示例 |
+|---------|------|------|
+| `p{场景号}_` | 序章（Prologue）变量 | `p02_mineIntel`、`p02_houYingIntroDone`、`p04_hiddenLore` |
+| `ch{章节}_{场景号}_` | 章节变量 | `ch1_03_metDengChanyu`、`ch1_07_bossDefeated` |
+| `npc_{NPC名}_` | NPC 状态变量 | `npc_houYing_trust`、`npc_houYing_introDone` |
+| `sys_` | 系统级变量（C# 读写） | `sys_lastBattleVictory`、`sys_lastItemUsed` |
+| `g_` | 全局跨存档 | `g_finishedPrologue`、`g_totalDeaths` |
+
+**规则**：
+1. 纯分支跳转用 `goto`，不创建变量
+2. 只有**跨脚本读取**或**C# 系统读取**时才创建变量
+3. 一个 NPC 的状态变量超过 3 个时，考虑后续归入阵营声望系统
+4. NPC 信任度/态度用 `npc_` 前缀变量，后续迁移到声望系统时统一替换
+
+**后续规划**：NPC 状态变量（`npc_` 前缀）将在阵营声望系统实现后迁移至该系统统一管理，届时脚本侧改用 ExpressionFunction 查询（如 `NpcReputation("HouYing")`）
+
+### 6.4 安全赋值运算符 `?=`
+
+```nani
+; 仅在变量不存在时赋值，避免覆盖已有存档数据
+@set prologueMineComplete ?= false
+@set g_FirstLaunch ?= true
+```
+
+在初始化脚本或变量首次使用处优先使用 `?=`。
+
+### 6.5 何时需要变量 vs 只用 goto
+
+**不需要变量**：纯脚本内部的分支跳转（`@choice ... goto:.Label`），选了就跳走，后续不再读取。
+
+**需要变量**：
+- **跨脚本读取**：A 脚本设置，B 脚本用 `@if` 判断
+- **影响后续对话内容**：同一脚本的后续段落根据此值分支
+- **C# 系统需要读写**：如战斗结果、地图标签
+
+### 6.6 当前变量清单
+
+#### 系统变量（C# 命令设置）
+
+| 变量名 | 类型 | 设置方 | 用途 |
+|--------|------|--------|------|
+| `lastBattleVictory` | boolean | `@startBattle` | 战斗胜负结果 |
+| `lastItemUsed` | boolean | `@requireItem` | 道具使用结果 |
+| `lastSkillSuccess` | boolean | `@useCompanionSkill` | 技能使用结果 |
+| `current_env_tags` | string | MapManager | 当前地图环境标签 |
+
+#### 序章变量
+
+| 变量名 | 类型 | 初始值 | 设置脚本 | 读取脚本 | 用途 |
+|--------|------|--------|----------|----------|------|
+| `mineIntel` | string | `""` | P02_Market | P02_Market(回访) | 矿坑情报等级，影响回访对话 |
+| `prologueMineComplete` | boolean | `false` | P04_Awakening | P02_Market | 矿坑完成，切换 POI 对话 |
+| `hiddenLore` | boolean | `false` | P04_Awakening | 后续章节 | 隐藏剧情解锁 |
+| `prologueComplete` | boolean | `false` | P02_Market(回访) | 后续章节 | 序章完成标志 |
+
+> **维护要求**：添加新变量时，先确认是否真正需要跨脚本/跨系统读取。纯分支跳转用 `goto` 即可，不要创建变量。需要变量时，同步更新此清单和 Naninovel 配置面板。
+
+---
+
+## 七、存档约定
 
 ### 全局持久数据（GlobalSave）
 
@@ -260,7 +358,7 @@ vars.SetVariableValue("combatPhase", new(2));
 
 ---
 
-## 七、常用模式
+## 八、常用模式
 
 ### 成就/解锁标志
 
@@ -288,7 +386,7 @@ Engine.GetService<ICustomVariableManager>()
 
 ---
 
-## 八、提交前检查
+## 九、提交前检查
 
 ```
 状态管理：

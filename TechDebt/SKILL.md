@@ -1,109 +1,68 @@
 ---
 name: TechDebt
-description: Workflow for TechDebt
+description: Audit EndGods technical debt read-only and produce file-cited priorities. Use when assessing code health, architecture decay, maintainability, refactoring backlog, or module quality.
 ---
 
-# Skill: TechDebt (技术债分析与清偿)
+# Technical Debt Audit
 
-**来源**：改编自 [wshobson/commands](https://github.com/wshobson/commands) · `tools/tech-debt.md`
+Audit first and separate remediation from implementation. Do not edit code, documentation, cards, or configuration unless the user explicitly authorizes a later bounded cleanup task.
 
-Trigger: 当用户说 `/tech-debt`、“技术债”、“代码腐化”、“需要重构”、“架构混乱”时触发。
+## Orient before judging
 
-## 目标
+1. Read AGENTS.md and Docs/INDEX.md.
+2. Define the requested repository, subsystem, module, time horizon, and exclusions.
+3. Read the applicable architecture, structure, testing, systemspec, and Knowledge authorities.
+4. Map entry points, ownership boundaries, dependencies, high-churn files, and large files.
+5. Inspect two or three accepted patterns before labeling a different pattern as debt.
+6. Run existing project checks before inventing new scanners.
 
-识别、量化并制定清偿计划，将技术债系统化处理，而非随机“碰到哪改哪”。
+On this Windows project, use Get-ChildItem, Select-String, and Get-Content rather than rg or grep. Use Tools/venv/Scripts/python.exe for project Python commands and do not install tools or dependencies without approval.
 
-## Phase 1：债务清单
+## Evidence sources
 
-### 1.1 代码层
-扫描 `Assets/Game/Scripts/` 中的以下问题：
+Prefer:
 
-```bash
-# 魔法数字（违反 GameConstants 规则）
-grep -rn "[^a-zA-Z_][ ]*[0-9]\+[^a-zA-Z_0-9.f]" --include="*.cs"
+- Git history and current working-tree state
+- Tools/venv/Scripts/python.exe Tools/lint/check_project_rules.py
+- Existing architecture and acceptance tests
+- Unity Console, importer, profiler, and screenshot evidence when relevant
+- Concrete file and line references
+- Repeated defects, churn, validation gaps, and ownership violations
 
-# Debug.Log（违规）
-grep -rn "Debug\.Log" --include="*.cs"
+A messy-looking file is not debt by itself. Establish actual maintenance cost, regression risk, rule conflict, or blocked delivery.
 
-# 协程（违规）
-grep -rn "IEnumerator\|yield return" --include="*.cs"
+## Audit dimensions
 
-# 临时补丁
-grep -rn "Task\.Delay\|Thread\.Sleep" --include="*.cs"
+Assess only material findings across:
 
-# 旧版 UI Text
-grep -rn "UnityEngine\.UI\.Text\b" --include="*.cs"
-```
+- Architecture and dependency boundaries
+- Project hard-rule and consistency drift
+- Type, state, async, lifecycle, and error-handling debt
+- Test quality, missing intent protection, stale diagnostics, and acceptance-matrix debt
+- Scene, Prefab, CSV, ScriptableObject, resource, and Naninovel contract drift
+- Dependency, tooling, importer, and build-pipeline debt
+- Performance and resource hygiene supported by measurements
+- Documentation and INDEX drift
+- UI, art, audio, or asset-pipeline debt when in scope
 
-### 1.2 架构层
+## Finding standard
 
-| 债务类型 | 检查内容 |
-|---------|---------|
-| 单例不规范 | 缺少 `_isQuitting` 保护 |
-| 直接引用 | 未通过 `ServiceLocator` 获取服务 |
-| 命名空间混乱 | 脚本不在正确的 `Game.*` 命名空间 |
-| 逻辑/表现混合 | Manager 中含 Naninovel 表现代码 |
-| 接口缺失 | Service 类未实现对应 `I*` 接口 |
+Every finding must include:
 
-### 1.3 数据同步层
-- CSV Importer 与数据结构是否对齐（`MapNodeEntry` 等）
-- Naninovel Managed Text 本地化条目是否完整
-- `GameConstants.cs` 中是否有已废弃的常量
+- ID and priority
+- Exact file and line or serialized asset location
+- Evidence and affected invariant
+- User or development impact
+- Confidence
+- Relative effort: small, medium, or large
+- Smallest remediation and required verifier
 
-### 1.4 文档层
-- 无注释的复杂算法（战斗公式、地牢生成逻辑等）
-- 过期的 walkthrough 文档
+Do not fabricate hours, ROI, coverage percentages, or performance gains. Include a Things that look risky but are intentional section and open questions to expose possible false positives. Do not pad empty categories.
 
-## Phase 2：影响评估
+## Remediation boundary
 
-对每项债务评估：
+Rank the highest-value items, but do not auto-fix them. For accepted debt, create a separate closed-loop task with allowed files, authority, verifier, evidence, and done condition. Avoid repository-wide cleanups, speculative rewrites, new abstractions, or new dependencies without explicit approval.
 
-| 维度 | 评分标准 |
-|------|---------|
-| **阻塞性** | 是否阻碍新功能开发？ |
-| **风险性** | 是否会引发 Bug 或崩溃？ |
-| **范围** | 影响多少个文件/系统？ |
-| **修复成本** | 需要多少工作量？ |
+## Output
 
-## Phase 3：清偿计划
-
-### 快速清偿（1-2小时，立即处理）
-- 替换所有 `Debug.Log` 为 `GameLogger.Log`
-- 补充 `_isQuitting` 到不规范的单例
-- 移动魔法数字进 `GameConstants.cs`
-
-### 中期重构（需排期，影响较大）
-- 协程 -> UniTask 迁移
-- 缺少接口的 Service 补充 `I*` 接口
-- 命名空间整理
-
-### 长期架构改造（需设计，跨多 Sprint）
-- 逻辑/表现边界重新划分
-- 数据层统一重构
-
-## Phase 4：预防机制
-
-清偿后建立护栏：
-- 在 CodeReview Skill 中加入对应检查项
-- 更新 CLAUDE.md 的代码审查清单
-- 关键路径添加架构测试（编辑器验证脚本）
-
-## 输出格式
-
-```
-## 技术债审计报告
-
-### 债务清单
-
-| 类型 | 文件 | 描述 | 严重性 |
-|------|------|------|--------|
-| 代码层 | ... | ... | 高/中/低 |
-
-### 优先清偿队列
-1. **[立即]** ...
-2. **[本周]** ...
-3. **[下个迭代]** ...
-
-### 预防建议
-- ...
-```
+Return scope and mental model, evidence sources, prioritized findings, top remediation queue, intentional exceptions, open questions, missing evidence, and recommended bounded follow-up tasks.
