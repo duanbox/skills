@@ -1,0 +1,4 @@
+interface:
+  display_name: "Game Playtest"
+  short_description: "Plan and analyze evidence-based EndGods playtests"
+  default_prompt: "Use $game-playtest to define and analyze a focused EndGods playtest without confusing observation with implementation proof."

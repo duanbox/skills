@@ -1,0 +1,4 @@
+interface:
+  display_name: "Interactive Narrative Review"
+  short_description: "Audit EndGods choices, branches, and consequences"
+  default_prompt: "Use $interactive-narrative-review to trace this EndGods choice flow and assess agency, state, and handoff contracts."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Narrative Consistency Review"
+  short_description: "Audit EndGods canon, chronology, and story facts"
+  default_prompt: "Use $narrative-consistency-review to audit this EndGods story scope for evidence-backed continuity conflicts."

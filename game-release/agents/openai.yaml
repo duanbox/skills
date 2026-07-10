@@ -1,0 +1,4 @@
+interface:
+  display_name: "Game Release Gate"
+  short_description: "Gate EndGods release candidates with fresh evidence"
+  default_prompt: "Use $game-release to run a target-specific EndGods release-readiness gate and return a Go or No-Go verdict."

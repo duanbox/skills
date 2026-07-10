@@ -1,0 +1,4 @@
+interface:
+  display_name: "Story Weaver"
+  short_description: "Write EndGods Naninovel scenes in project voice"
+  default_prompt: "Use $StoryWeaver to write or revise an EndGods scene while preserving project voice, syntax, and system boundaries."

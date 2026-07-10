@@ -1,0 +1,4 @@
+interface:
+  display_name: "Content Coverage Audit"
+  short_description: "Trace planned EndGods content to playable evidence"
+  default_prompt: "Use $content-coverage-audit to compare this EndGods content plan with data, scripts, entry points, and verification evidence."
