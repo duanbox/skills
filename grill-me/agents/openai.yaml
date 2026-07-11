@@ -1,0 +1,6 @@
+interface:
+  display_name: "EndGods Grill"
+  short_description: "Pressure-test EndGods plans before implementation"
+  default_prompt: "Use $grill-me to pressure-test this EndGods plan before implementation."
+policy:
+  allow_implicit_invocation: true
