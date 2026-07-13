@@ -1,11 +1,18 @@
 ---
 name: CodeReview
-description: Review bounded EndGods changes without editing them. Use when the user asks for a code, diff, PR, change-assessment, or merge-readiness review.
+description: Review EndGods changes without editing them. Use when the user asks for a bounded code, diff, PR, change-assessment, or merge-readiness review, or explicitly requests a full, deep, or comprehensive implementation review.
 ---
 
 # Code Review
 
 Review is read-only by default. Do not edit code, update documentation, stage changes, or auto-fix findings unless the user explicitly requests a separate implementation pass.
+
+## Select review depth
+
+- Use `STANDARD` for a bounded code, diff, PR, change-assessment, or merge-readiness review.
+- Use `DEEP` only when the user explicitly asks for a full, deep, or comprehensive review. Define the feature, subsystem, card, commit range, or file set; list applicable authorities and required evidence; and state coverage limits before reviewing a very large scope.
+- In `DEEP`, evaluate only applicable dimensions: requirements and acceptance, correctness and failure handling, architecture and ownership, security and data-loss boundaries, measured performance risk, intent-protecting tests, serialized and data contracts, UI/accessibility and screenshot evidence, documentation synchronization, and delivery evidence.
+- Independent read-only dimensions may be delegated when supported, but the main reviewer must verify, deduplicate, and reconcile the evidence.
 
 ## Establish scope
 
@@ -47,5 +54,7 @@ Return findings first, ordered by priority. Then include:
 - Missing or stale evidence
 - Residual risks and coverage limits
 - Verdict: ready, ready with non-blocking notes, not ready, or inconclusive
+
+For `DEEP`, also include coverage by dimension, confirmed compliant contracts that materially reduce risk, and the next recommended bounded task.
 
 If no findings exist, say so directly and still report evidence gaps. Do not modify Docs/rules/rules_code_structure.md merely because a review occurred.

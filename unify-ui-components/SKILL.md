@@ -1,6 +1,6 @@
 ---
 name: unify-ui-components
-description: Audit and plan consistent EndGods UI component families used by at least two screens, Prefabs, or other consumers. Use when consolidating repeated buttons, panels, tabs, cards, slots, list rows, badges, icon frames, or stateful bitmap families; choosing a canonical shared primitive, Prefab Variant, screen-specific component, or temporary candidate; or defining a contact sheet and screenshot acceptance matrix. Default to read-only analysis; modify project files only with explicit user authorization.
+description: Audit EndGods UI component families shared by at least two consumers and choose canonical primitive, Prefab Variant, screen-specific, or temporary ownership. Use when the user requests consolidation; read-only by default.
 ---
 
 # Unify UI Components
@@ -10,7 +10,7 @@ Own cross-consumer component consistency and canonical-family decisions. Do not 
 ## Scope gate
 
 1. Require at least two concrete consumers. Name their screens, Scenes, Prefabs, or component instances.
-2. If only one consumer is in scope, use `game-ui-designer` for player-experience decisions or `UI & UX Design` for authorized implementation.
+2. If only one consumer is in scope, use `game-ui-designer` for player-experience decisions or `ui-ux` for authorized implementation.
 3. Default to a read-only audit and proposal. Do not edit Scenes, Prefabs, assets, briefs, or code unless the user explicitly authorizes implementation.
 4. Do not invent a new gameplay system, visual language, token, dimension, state, or breakpoint. Resolve them from current project authority.
 
@@ -23,7 +23,7 @@ Own cross-consumer component consistency and canonical-family decisions. Do not 
    - colors and style tokens: `Docs/rules/rules_uicolor.md`
    - bitmap, importer, provenance, and promotion: `Docs/rules/rules_assets.md` and `Docs/rules/rules_resources.md`
    - screen-specific intent: every affected per-UI brief
-   - acceptance: `Docs/rules/rules_testing.md` and the applicable acceptance matrix
+   - acceptance, only for authorized implementation or final signoff: `Docs/rules/rules_testing.md` and the applicable acceptance matrix
 4. Inspect the real shared-asset inventory, every consumer's Scene or Prefab, bindings, current screenshots, and bitmap provenance before recommending consolidation.
 
 Treat the current Scene or Prefab as implementation truth. Stitch, Pencil, generated mockups, and design explorations are upstream visual references and must not overwrite signed-off Scene geometry.
@@ -74,24 +74,24 @@ Prefer existing finalized primitives and tokens. Surface authority conflicts ins
 
 ### 4. Audit states and bitmaps
 
-Build a consumer-by-state matrix from actual requirements. Mark missing states, conflicting semantics, inconsistent labels, unsafe focus behavior, bitmap drift, clipped borders, alpha defects, import-setting differences, or untracked candidates.
+Compare only the states and bitmap properties required by the concrete consumers. Mark missing states, conflicting semantics, unsafe focus behavior, bitmap drift, clipped borders, alpha defects, import-setting differences, or untracked candidates. Use a compact table only when it materially clarifies the decision; a formal matrix is not required for a read-only ownership audit.
 
 For bitmap work, route generation or redraw to `art-pipeline` and `imagegen`. Keep candidates in project staging, require provenance and visual QA, and promote only through the current asset rules. This skill decides family ownership; it does not generate or promote art.
 
 ### 5. Specify the contact sheet
 
-Define a contact sheet that shows the canonical component, every legitimate Variant, every required state, and representative consumers at comparable presentation scale. Label each cell with its source and evidence status.
+Define or create a contact sheet only when the user explicitly requests it, authorized implementation is underway, or the family is entering final signoff. When used, show the canonical component, legitimate Variants, required states, and representative consumers at comparable scale, with source and evidence labels.
 
-Use the contact sheet to expose family drift; do not use it as final Unity proof. By default, describe the sheet without writing files. Create or update the artifact only when explicitly requested.
+Do not use a contact sheet as final Unity proof. Skip this step for a bounded read-only ownership decision when it adds no material evidence.
 
 ### 6. Build the screenshot acceptance matrix
 
-For every affected consumer and required state, record:
+Create or update a formal screenshot acceptance matrix only when the user explicitly requests it, implementation is authorized and underway, or the family is entering final signoff. When required, record:
 
 | Family | Consumer | State | Visual authority | Real Scene/GameView evidence | Parity result | Approved exception | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 
-Require current real Scene or GameView evidence for implementation acceptance. A mockup, Pencil frame, contact sheet, isolated harness, compile pass, or test pass alone is insufficient.
+For implementation acceptance, follow the current `AGENTS.md` risk lane and its real screenshot requirements. Do not add a full parity report or matrix to a read-only proposal or `FAST` visual-only adjustment unless its escalation trigger entered scope.
 
 ### 7. Propose migration
 
@@ -105,7 +105,7 @@ Order work by canonical source first, then Variants, then consumers. Identify af
 - Use Claude Design, when available, for alternate visual exploration; treat its output like any other upstream reference.
 - Use `game-ui-designer` when information hierarchy, navigation, onboarding, or player decisions are unresolved.
 - Use `art-pipeline` and `imagegen` for bitmap-family creation, redraw, provenance, promotion, and visual QA.
-- After explicit implementation authorization, use `UI & UX Design` for Scene, Prefab, Variant, binding, and asset wiring changes.
+- After explicit implementation authorization, use `ui-ux` for Scene, Prefab, Variant, binding, and asset wiring changes.
 - Use `unity-animation` for shared transition, state-motion, lifecycle, cancellation, replay, and reduced-motion contracts.
 - Use `Verify` for fresh, risk-based Unity, screenshot, parity, and acceptance evidence.
 
@@ -118,10 +118,9 @@ Report:
 1. family scope and concrete consumers
 2. current inventory and evidence gaps
 3. canonical ownership decision with rejected alternatives
-4. state and bitmap consistency matrix
-5. contact-sheet specification or artifact evidence
-6. screenshot acceptance matrix
-7. migration order, affected scope, and explicit authorization boundary
-8. result as `Verified`, `Should work`, or `Skipped / blocked`
+4. material state or bitmap conflicts
+5. migration order, affected scope, and explicit authorization boundary
+6. contact-sheet or screenshot-matrix evidence only when that conditional gate applies
+7. result as `Verified`, `Should work`, or `Skipped / blocked`
 
 Do not claim a unified family is implemented until every authorized consumer has the required real screenshot evidence and applicable verification gates pass.

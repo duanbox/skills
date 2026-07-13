@@ -1,18 +1,17 @@
 ---
 name: grill-me
-description: Pressure-test EndGods plans and designs before implementation. Use automatically for vague, high-risk, design-heavy, cross-system, authority-conflicting, or acceptance-ambiguous work; use deep mode when the user invokes $grill-me or asks to grill, interrogate, challenge, or pressure-test a plan. Do not use for clear low-risk mechanical work or questions with no material decision.
+description: Deeply pressure-test an EndGods plan. Use when the user explicitly invokes $grill-me or asks to grill, challenge, or pressure-test it; never auto-trigger from risk or ambiguity alone.
 ---
 
 # Grill Me
 
-Resolve material decisions before implementation while keeping ordinary EndGods work low-friction. This skill is a decision gate, not an implementation workflow.
+Resolve material decisions before implementation when the user explicitly requests a deep challenge. This skill is a manual decision gate, not an implementation workflow or an automatic prerequisite for ordinary EndGods work.
 
-## Select the mode
+## Explicit invocation only
 
-- Use `DEEP` when the user explicitly invokes `$grill-me` or `/grill-me`, says `grill me`, or asks to interrogate, challenge, or pressure-test a plan or design.
-- Use `MICRO` when the skill triggers automatically because the request is vague, high-risk, design-heavy, cross-system, authority-conflicting, or unclear about acceptance.
-- In `DEEP`, do not implement until the user explicitly confirms shared understanding.
-- In `MICRO`, ask only questions whose answers materially change the result. Record non-blocking uncertainty as visible assumptions and continue once the gate passes.
+- Run this workflow only after the user explicitly invokes `$grill-me` or `/grill-me`, says `grill me`, or asks to interrogate, challenge, or pressure-test a plan or design.
+- Do not trigger automatically because a task is vague, high-risk, design-heavy, cross-system, authority-conflicting, or unclear about acceptance. Handle ordinary ambiguity through the current `AGENTS.md` rules for discoverable facts, visible assumptions, and blocking questions.
+- Do not implement until the user explicitly confirms the resulting shared understanding.
 
 ## Establish facts first
 
@@ -33,21 +32,19 @@ Treat a decision as material when it changes one or more of:
 
 Do not grill over facts the repository can answer, choices fixed by authority, wording preferences with no downstream effect, or reversible local details already inside the user's approved scope.
 
-## Run the gate
+## Run the deep review
 
 Before the first question, emit exactly one visible opening signal:
 
 ```text
-Grill gate: active — <MICRO|DEEP>; <N> material decision(s) unresolved.
+Grill gate: active - DEEP; <N> material decision(s) unresolved.
 ```
 
 If no material decision remains, emit:
 
 ```text
-Grill gate: passed — no material decision remains; assumptions: <none or concise list>.
+Grill gate: passed - no material decision remains; assumptions: <none or concise list>.
 ```
-
-Then continue with the appropriate owning skill when the user already requested implementation.
 
 For each unresolved decision:
 
@@ -60,20 +57,12 @@ For each unresolved decision:
 Use this compact question form:
 
 ```text
-Grill <N> — Recommendation: <answer and reason>
+Grill <N> - Recommendation: <answer and reason>
 Decision: <single question>
 Impact: <what changes based on the answer>
 ```
 
-## Complete the mode
-
-For `MICRO`:
-
-- Stop asking once no blocking material decision remains.
-- State remaining assumptions explicitly.
-- Form or update the task's closed-loop contract, then continue the authorized workflow.
-
-For `DEEP`:
+## Complete the review
 
 - Walk every material branch, including failure behavior, boundaries, acceptance, and non-goals.
 - End with a concise decision record and closed-loop contract: objective, non-goals, decisions, assumptions, allowed and forbidden files, authority documents, checkers, required evidence, and done condition.

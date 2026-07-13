@@ -1,6 +1,6 @@
 ---
 name: TechDebt
-description: Audit EndGods technical debt read-only and produce file-cited priorities. Use when assessing code health, architecture decay, maintainability, refactoring backlog, or module quality.
+description: Audit EndGods technical debt read-only with file-cited priorities. Use when the user explicitly requests a debt audit or refactoring backlog; not for ordinary review, debugging, or implementation.
 ---
 
 # Technical Debt Audit

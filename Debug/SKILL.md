@@ -26,7 +26,7 @@ Build the feedback loop before changing the implementation. A diagnosis request 
 4. State one hypothesis and why the evidence supports it.
 5. Test one variable at a time with the smallest safe probe.
 6. If the hypothesis fails, return to evidence collection instead of stacking fixes.
-7. After three failed fix attempts, stop and question the architecture or missing authority with the user.
+7. When repeated hypotheses fail, reset the evidence model and reassess the execution path, authority, and architecture. Ask the user only when progress requires a material decision, missing authority, unavailable external state, or new scope; do not stop merely because a fixed attempt count was reached.
 
 Do not use delays, retries, polling, swallowed exceptions, defensive defaults, or broad null checks to hide an unknown cause.
 

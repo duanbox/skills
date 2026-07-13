@@ -45,7 +45,7 @@ Trace each unit through:
 - Do not fill empty calendar slots or invent training, work, healing, crafting, escort, puzzle, arena, daily, or live-operations systems.
 - Do not convert free actions into time-cost actions.
 - Do not broaden P0 with attractive but unapproved content.
-- Do not replace `FullReview`; use this skill only for plan-to-playable content coverage.
+- Do not replace `CodeReview`, including its deep/comprehensive mode; use this skill only for plan-to-playable content coverage.
 
 ## Output
 

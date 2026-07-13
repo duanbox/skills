@@ -1,4 +1,4 @@
 interface:
   display_name: "Unify UI Components"
-  short_description: "Audit and unify shared EndGods UI component families"
-  default_prompt: "Use $unify-ui-components to audit repeated UI components across EndGods screens and propose a canonical family."
+  short_description: "Choose ownership for shared EndGods UI families"
+  default_prompt: "Use $unify-ui-components to audit a UI family with at least two concrete EndGods consumers and choose its ownership model; add a contact sheet or formal screenshot matrix only when explicitly requested, implementing, or signing off."

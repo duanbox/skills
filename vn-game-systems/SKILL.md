@@ -1,6 +1,6 @@
 ---
 name: VN Game Systems
-description: Implement and verify EndGods map, town, dungeon, inventory, time, save, and Naninovel gameplay bridges. Use when changing those systems' state, ownership, or flow.
+description: Implement EndGods map, town, dungeon, inventory, time, save, and Naninovel-bridge runtime contracts. Use when changing authoritative state, service ownership, persistence, command handoff, or cross-system flow; not for content-only or UI-only work.
 ---
 
 # VN Game Systems
@@ -45,19 +45,23 @@ When these sources disagree with an old plan or copied rule, follow the current 
 ## Workflow
 
 1. Define the player-visible failure or required behavior and its pass/fail signal.
-2. Inspect the live Unity scene and runtime hierarchy first: active/inactive objects, serialized references, registered services, current state, and Console.
-3. Inspect the relevant C# path, database/CSV/SO data, and only then the `.nani` script or Command syntax.
+2. Inspect live Unity state first only when runtime or Scene risk enters scope: active/inactive objects, serialized references, registered services, current state, and Console. Otherwise start from the relevant authority, code, or data and do not open Unity merely to satisfy this skill.
+3. Inspect the relevant C# path, database/CSV/SO data, and only then the `.nani` script or Command syntax when those layers are in scope.
 4. Read two or three current usages before modifying an interface, state field, node type, or bridge.
 5. Use `Tools/Game/Unified Data Importer` for CSV-to-ScriptableObject changes; do not create a side importer.
 6. Keep the change surgical. If it crosses systems or exceeds five files, restate scope and verification before continuing.
 
 ## Verification
 
-- Always run the project rule scan, Unity recompile, and Console check for runtime C# changes.
+Classify verification under the current `AGENTS.md` risk lane and cover only contracts changed by this task.
+
+- Runtime C# changes: run the project rule scan, Unity recompile, and Console check as required by `AGENTS.md`.
 - Map/data changes: verify CSV, imported database, Scene/Prefab, icon/reference wiring, and affected node flow.
 - Save/state changes: test old/default/invalid values and save-load round-trip behavior.
 - Dungeon/inventory/time changes: run the smallest focused system or gameplay-flow test.
 - Naninovel bridge changes: reimport affected scripts, check parse errors, and run the actual handoff flow.
 - UI or visible map/dungeon changes: include real Scene/GameView or PlayMode screenshot evidence.
+
+Skip Unity live-state inspection, recompilation, tests, imports, or screenshots whose risk did not enter scope; report the applicable `AGENTS.md` skip reason instead of manufacturing evidence.
 
 Report the authority documents used, state owner, changed contracts, data/import effects, tests and screenshots, and any validation that remains blocked.

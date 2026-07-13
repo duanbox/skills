@@ -1,11 +1,11 @@
 ---
-name: UI & UX Design
+name: ui-ux
 description: Implement and verify EndGods UI under Scene and Prefab authority. Use when changing UI Scenes, Prefabs, generators, bindings, layout, styling, navigation, visibility, assets, or scene flow.
 ---
 
 # UI & UX Design
 
-This skill owns EndGods UI implementation. Use `game-ui-designer` first when the task is still deciding player experience, information hierarchy, navigation, or onboarding; begin this workflow once the design authority and target screen/state are known.
+This skill owns authorized EndGods UI implementation. Use `game-ui-designer` only when material player-experience, information-hierarchy, navigation, or onboarding decisions remain unresolved; a bounded task with an approved design authority may enter this workflow directly.
 
 ## Required Routing
 
@@ -43,16 +43,12 @@ This skill owns EndGods UI implementation. Use `game-ui-designer` first when the
 
 ## Verification
 
-Every UI change requires:
+Classify the verification lane under the current `AGENTS.md` before editing. This skill does not add gates beyond the risk that actually entered scope.
 
-1. ownership gate and confirmed Scene/Prefab write
-2. real Scene/GameView or PlayMode screenshot of every changed state
-3. parity review against the selected visual authority
-4. project rule scan
-5. Unity recompile and Console check
-
-For visual-only Scene Preview work, report `Skipped / visual-only Scene preview change`; do not run Test Runner only to obtain a screenshot. When entry, interaction, visibility, binding, services, async timing, resources, or scene flow changes, run the smallest relevant EditMode/PlayMode/screenshot test and update the required acceptance matrix.
+- For a `FAST` visual-only Scene/Prefab adjustment, use exactly the minimum evidence currently required by `AGENTS.md`, including the real screenshot requirement. Do not add a formal/full parity report, Unity recompile, Test Runner, `strict-final`, registry regeneration, multi-resolution capture, or matrix update unless its escalation trigger entered scope.
+- When runtime or Editor code, interaction, visibility, binding, services, async timing, resources, data, or scene flow changes, run only the smallest checks required by the applicable `AGENTS.md` lane and relevant authority.
+- Do not use verification failure as permission to expand scope or restore an obsolete visual value.
 
 ## Handoff
 
-Report the screen/state, visual authority, Scene/Prefab ownership decisions, runtime binding changes, asset classifications, screenshot evidence, parity result, and exact verification status. A UI task is not complete while required screenshot evidence is missing.
+Report the screen/state, visual authority, changed ownership or runtime contracts, asset classifications, and only the evidence required by the selected `AGENTS.md` lane. A UI task is not complete while evidence required by that lane is missing.

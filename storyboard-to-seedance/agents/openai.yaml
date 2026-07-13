@@ -1,4 +1,4 @@
 interface:
   display_name: "Storyboard to Seedance"
   short_description: "Nine-shot EndGods boards to Seedance prompts"
-  default_prompt: "Use $storyboard-to-seedance to create a nine-shot Chinese production board and traceable Seedance shot package from this story brief."
+  default_prompt: "Use $storyboard-to-seedance only for an explicitly requested nine-shot EndGods production board or traceable Seedance shot package."

@@ -10,8 +10,7 @@ Evidence precedes every PASS claim. Verification may run the checks authorized b
 ## Select the gate
 
 1. Read AGENTS.md and Docs/INDEX.md.
-2. Read Docs/rules/rules_testing.md, Docs/rules/rules_test_acceptance_matrix.md, and Docs/rules/unitymcp.md.
-3. Inspect the actual diff or stated scope and classify it:
+2. Inspect the actual diff or stated scope and apply the current verification lane and escalation triggers from AGENTS.md:
    - Documentation only
    - Low-risk mechanical code change
    - Runtime behavior or serialized contract
@@ -19,21 +18,24 @@ Evidence precedes every PASS claim. Verification may run the checks authorized b
    - Runtime UI interaction, binding, entry, service, or resource change
    - Data or importer change
    - Asset, audio, video, or story change
-4. Read the relevant subsystem authority and determine the smallest sufficient verifier before running commands.
+3. Use `FAST` for work that meets the current AGENTS.md FAST contract. Escalate only when a concrete risk named by AGENTS.md enters scope; do not add tests, matrices, parity reports, recompilation, or harness receipts merely because this skill is active.
+4. Read only the authorities needed by the selected verifier. Read Docs/rules/rules_testing.md and the acceptance matrix when tests or test lifecycle are involved; read Docs/rules/unitymcp.md when Unity MCP is required.
+5. Determine the smallest sufficient verifier before running commands.
 
 ## Core gates
 
 Use the applicable gates, not a generic build ritual:
 
 - Project rules: Tools/venv/Scripts/python.exe Tools/lint/check_project_rules.py
+- Documentation-only work: run only the applicable text, encoding, link, index, or focused rule checks; do not invoke Unity solely for documentation.
+- FAST visual-only adjustment to an existing Scene or Prefab: require the scoped serialized write, narrow diff, real screenshot of each affected state, direct comparison with the existing visual authority, rule scan, Console check, and the read-only Scene safety audit when the persistent EndGods.unity Scene changed. Do not require a generated parity report, strict-final, registry regeneration, multi-resolution capture, Unity recompile, or Test Runner unless an AGENTS.md escalation trigger entered scope.
 - Runtime C#: Unity MCP recompile_scripts, then get_console_logs
-- Behavior or serialized contracts: smallest relevant EditMode or PlayMode test
+- Behavior or non-FAST serialized contracts: smallest relevant EditMode or PlayMode test
 - PlayMode tests: detached mode as required by Docs/rules/unitymcp.md
-- Visual-only UI: ownership gate, Scene or Prefab write evidence, real Scene or GameView screenshot, parity check, rule scan, recompile, and Console; skip Test Runner with the documented reason
 - Runtime UI: focused PlayMode or flow evidence plus required screenshot
 - Data: Unified Data Importer, headers, generated assets, dependent load paths, and Console
 - Story: Naninovel import, identifiers, variables, commands, focused flow when runtime behavior changed
-- Low-risk mechanical changes: rule scan, recompile, and Console; report the permitted test skip explicitly
+- Low-risk mechanical changes: use the replacement checks required by AGENTS.md and report the permitted test skip explicitly; recompile only when the changed file type or risk requires it
 
 Unity Test Runner is single-owner. If a job is queued or running, poll it to terminal state before starting another.
 

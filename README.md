@@ -4,8 +4,9 @@ This directory is the single global source for EndGods skills distributed by ski
 
 ## Current baseline
 
-- skillshare CLI and bundled skill: `v0.20.21`
-- shared skills: 31
+- skillshare CLI: `v0.20.21`
+- `skillshare` skill: project-owned thin router; command syntax comes from live CLI `--help`
+- shared skills: 28
 - targets: antigravity, claude, codex, cursor, gemini, grok, kilocode, opencode, trae
 - target mode: copy, except grok uses merge
 - project rules and workflows are separate extras; they are not skills
@@ -19,9 +20,7 @@ Workflow and review:
 - `Architect`
 - `CodeReview`
 - `Debug`
-- `FullReview`
 - `PerformanceOpt`
-- `SmartFix`
 - `StoryWeaver`
 - `TechDebt`
 - `Verify`
@@ -56,9 +55,7 @@ Asset and media:
 External tooling:
 
 - `skillshare`
-- `stitch-design-md`
-- `stitch-generate-design`
-- `stitch-manage-design-system`
+- `stitch`
 
 ## Skill authoring rules
 
@@ -75,8 +72,8 @@ External tooling:
 
 The following frontmatter names are intentionally retained because `Docs/agent_board/skill_registry.md`, role defaults, and existing cards use them:
 
-- `Architect`, `CodeReview`, `Debug`, `FullReview`, `PerformanceOpt`, `SmartFix`, `StoryWeaver`, `TechDebt`, `Verify`
-- `Architecture & Code Structure`, `UI & UX Design`, `VN Game Systems`
+- `Architect`, `CodeReview`, `Debug`, `PerformanceOpt`, `StoryWeaver`, `TechDebt`, `Verify`
+- `VN Game Systems`
 
 They are known exceptions to the lowercase hyphen-case recommendation. Rename them only as an explicit migration that updates the Agent Board registry, roles, prompts, and cards together. `unity-animation` has already been normalized because it had no such dependency.
 
@@ -96,9 +93,9 @@ $py = 'D:\Project\EndGods\Tools\venv\Scripts\python.exe'
 & $ss doctor --global --json
 ```
 
-Run `quick_validate.py` with `PYTHONUTF8=1` on Windows. Treat only the compatibility names above and the pinned upstream `skillshare` schema extension as documented validator exceptions.
+Run `quick_validate.py` with `PYTHONUTF8=1` on Windows. Treat only the compatibility names above as documented validator exceptions.
 
-After sync, every target must contain the same 31 shared skill trees. Grok additionally keeps its native local skills; `diff --json` may describe those as local-only removals even though merge mode intentionally preserves them.
+After sync, every target must contain the same 28 shared skill trees. Grok additionally keeps exactly three local-only skills under its merge target: `help`, `imagine`, and `create-skill`; never collect or sync them into this source.
 
 Grok-local skills are outside this repository. Never collect them into the central source or include them in public commits.
 

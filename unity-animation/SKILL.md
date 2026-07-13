@@ -1,6 +1,6 @@
 ---
 name: unity-animation
-description: Implement lifecycle-safe EndGods DOTween and UniTask animation. Use when changing tweens, Sequences, UI transitions, camera or map motion, timing, cancellation, replay, or reduced motion.
+description: Implement lifecycle-safe EndGods DOTween and UniTask animation. Use when changing ownership, await, cancellation, teardown, replay, time scale, or reduced motion; not for static layout or generic visual design.
 ---
 
 # Unity Animation
@@ -14,7 +14,7 @@ Use the installed source and current project patterns as authority. The current 
 - For text effects, read `Docs/Knowledge/textanimator.md`; Naninovel text tags are not DOTween effects.
 - For feedback/juice, inspect the existing MMFeedbacks pattern before adding a parallel DOTween effect.
 - For validation ownership, read `Docs/rules/rules_testing.md`.
-- Verify APIs against `Assets/Plugins/Demigiant/DOTween/`, `Assets/Plugins/UniTask/package.json`, and the installed UniTask DOTween extensions rather than external examples.
+- When the change depends on a version-specific API or await extension, verify it against `Assets/Plugins/Demigiant/DOTween/`, `Assets/Plugins/UniTask/package.json`, and the installed UniTask DOTween extensions rather than external examples.
 
 ## Workflow
 
@@ -38,9 +38,11 @@ Use the installed source and current project patterns as authority. The current 
 
 ## Verification
 
-- Runtime C# change: project rule scan, Unity recompile, and clean Console.
-- Behavior, timing, visibility, async, or scene-flow change: smallest relevant EditMode/PlayMode test or gameplay flow.
-- Visual UI animation: real GameView/PlayMode screenshot or capture of the affected state, plus reduced-motion/re-entry checks when relevant.
-- Exercise at least: first play, repeated open/close, target disable/destroy, cancellation, and pause/time-scale behavior.
+Classify verification under the current `AGENTS.md` risk lane and exercise only states whose lifecycle contract changed or presents a credible regression risk.
 
-Report the installed versions checked, lifetime owner, cancellation/re-entry decision, verification evidence, and any skipped validation.
+- Runtime C# change: project rule scan, Unity recompile, and Console check as required by `AGENTS.md`.
+- Behavior, visibility, async, or scene-flow change: smallest relevant test or gameplay flow for the changed contract.
+- Visible UI animation: real GameView/PlayMode evidence of the affected state as required by the UI lane.
+- Check repeated open/close, target disable/destroy, cancellation, replay, reduced motion, or pause/time-scale only when the implementation touches that state. Do not require the full list for every tween edit.
+
+Report the lifetime owner, changed cancellation/re-entry decision, verification evidence, and any skipped validation. Report installed versions only when a version-specific API or extension was material to the change.

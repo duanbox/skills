@@ -1,159 +1,39 @@
 ---
 name: game-ui-designer
-description: Design and review EndGods player-facing interfaces and prepare implementation-ready handoffs. Use when deciding or auditing screen hierarchy, flow, navigation, accessibility, feedback, economy clarity, onboarding, or player-visible states. Do not use for Unity Scene/Prefab implementation or bitmap production.
+description: Resolve EndGods player-facing UI decisions. Use when hierarchy, flow, navigation, accessibility, feedback, onboarding, or visible states remain unsettled; not as a gate for approved Unity implementation.
 ---
 
 # Game UI Designer
 
-## Overview
+## Ownership
 
-Use this skill for gameplay-facing interface design and implementation-ready handoffs. It is optimized for fast decisions on hierarchy, interaction cost, readability under pressure, controller navigation, economy surfaces, and tutorial pacing; it does not own Unity implementation.
+This skill owns unresolved EndGods player-experience decisions: information hierarchy, player-visible states, navigation and focus, feedback, accessibility, onboarding, and economy clarity. It does not own Unity Scene/Prefab implementation, bitmap production, gameplay-system logic, or generic UI design education.
 
-## Use This Skill
+Do not require this skill as a serial prerequisite for `ui-ux`. If the target screen, visual authority, and player-visible behavior are already approved, enter the implementation workflow directly.
 
-- Designing or refactoring HUD, crosshair, ability bars, health bars, boss frames, minimaps, quest trackers, or combat notifications
-- Building main menu, pause menu, settings, map, codex, quest log, or game over flows
-- Designing inventory, equipment, loot, vendor, or other economy screens already authorized by current project specifications
-- Building first-time user experience, tutorials, hints, or guided onboarding
-- Reviewing a game UI implementation for clarity, friction, accessibility, or production readiness
+## Authority gate
 
-## Skip This Skill
+1. Read `AGENTS.md`, then use the UI routes in `Docs/INDEX.md`.
+2. Read `Docs/Pipeline/ui-vibe-coding-pipeline.md`, `Docs/rules/rules_ui.md`, and the affected screen brief only when the task needs those authorities.
+3. When bitmap ownership, provenance, import, or promotion is in scope, also read `Docs/rules/rules_assets.md` and `Docs/rules/rules_resources.md`.
+4. Inspect the current player-visible screen, flow, states, and available evidence before proposing a replacement.
 
-- Backend economy logic with no UI impact
-- Pure VFX work with no player interaction layer
-- Engine tooling or editor extensions for developers only
-- Generic web marketing pages unrelated to the game client
+Use the optional files under `references/` only when one directly answers the current task; do not load a generic HUD, menu, shop, or tutorial checklist by default.
 
-## Working Style
+## Design workflow
 
-Prioritize the following in order:
+1. State the player outcome and the material decision that remains unresolved.
+2. Map only the relevant entry, exit, empty, loading, locked, error, repeat-entry, and destructive-action states.
+3. Decide information priority, navigation/focus order, feedback timing, and accessibility behavior from current EndGods authority and evidence.
+4. Identify the data shown and its existing gameplay owner without inventing a new service, binding, asset, or runtime contract.
+5. Resolve discoverable facts from the repository. State only assumptions that can materially change the design.
+6. Keep the answer proportional: a bounded review may need a few decisions, not a mandatory multi-section design document.
 
-1. Moment-to-moment readability
-2. Input efficiency for controller, keyboard/mouse, and touch if relevant
-3. Information hierarchy under stress
-4. Feedback quality and state clarity
-5. Economy trust and tutorial pacing
-6. Visual style consistency
+## Review and handoff
 
-## Workflow
-
-### 1. Classify the Surface
-
-Decide which primary surface the task belongs to:
-
-- `combat-hud`
-- `menu-navigation`
-- `inventory-loadout`
-- `shop-economy`
-- `onboarding-tutorial`
-
-Then read only the matching reference file under `references/`.
-
-### 2. Enter the EndGods Authority Gate
-
-Before recommending layouts, assets, or implementation details for EndGods:
-
-1. Read `AGENTS.md` and the UI routes in `Docs/INDEX.md`.
-2. Read `Docs/Pipeline/ui-vibe-coding-pipeline.md` and `Docs/rules/rules_ui.md`.
-3. When bitmaps, UI art, imports, or generated assets are involved, also read `Docs/rules/rules_assets.md` and `Docs/rules/rules_resources.md`.
-
-Use those files as current authority instead of copying their values or procedures into this skill.
-
-### 3. Identify Player Context
-
-Before proposing layouts or code, anchor the design to:
-
-- camera distance: first-person, third-person, isometric, side-view, top-down
-- session intensity: combat, traversal, downtime, meta-progression
-- primary input: controller, keyboard/mouse, touch, hybrid
-- decision speed: split-second, short, deliberate
-- information permanence: always-on, contextual, or hidden by default
-
-If the request is vague, infer the minimum viable assumptions and state them briefly.
-
-### 4. Produce Output in This Shape
-
-When designing or reviewing, structure the answer as:
-
-1. `Surface and context`
-2. `Layout decision`
-3. `Interaction and navigation`
-4. `Feedback and animation`
-5. `Accessibility and edge cases`
-6. `Implementation notes`
-
-Keep recommendations concrete. Prefer placement, sizing, navigation, and state rules over abstract taste language.
-
-## Core Rules
-
-### HUD
-
-- Reserve the center for aiming, enemies, and hazards; do not park persistent UI in the foveal zone.
-- Persistent combat information must be scannable in under one second.
-- Show only the stats that affect the next player decision.
-- Use motion and flashes for change, not for idle decoration.
-- Put urgent survival information near the player focal path; push secondary systems outward.
-
-### Menus
-
-- Every menu must answer: where am I, what can I do here, how do I go back.
-- Controller navigation must be deterministic; avoid invisible focus jumps.
-- Split broad navigation from deep configuration. Do not dump all settings into one flat list.
-- Settings changes should preview immediately when safe, otherwise require explicit confirm/revert.
-
-### Inventory and Shops
-
-- Separate browse, compare, and commit states clearly.
-- Always expose item rarity, slot, ownership/equipped state, and value without opening a detail modal when possible.
-- Make currency sources and sinks trustworthy; never obscure the final spend or reward delta.
-- Prevent misclick purchases with confirmation only for high-risk actions; low-value repeated actions should stay fast.
-
-### Tutorials
-
-- Teach only what unlocks the next successful action.
-- Prefer contextual prompts over long pre-play instruction walls.
-- Gate on demonstrated understanding where failure cost is low.
-- Do not interrupt mastery loops with repeated modal teaching.
-
-## Review Mode
-
-When reviewing an existing UI, look for:
-
-- unreadable combat information
-- duplicated or competing focal points
-- controller dead ends
-- hidden economy risk or weak purchase clarity
-- tutorial overload or prompt spam
-- animation that delays player agency
-
-Call out findings in severity order. Include exact screen or component names when possible.
-
-## Reference Map
-
-- HUD and combat overlays: `references/hud.md`
-- Main menu, pause, settings, and navigation shells: `references/menus.md`
-- Inventory, equipment, loot, crafting, and shops: `references/inventory-shop.md`
-- Tutorial prompts, first-time flows, and guided onboarding: `references/onboarding.md`
-- Fast audit checklist for implementation review: `references/review-checklist.md`
-
-## EndGods Implementation Handoff
-
-This skill decides the player experience; it does not override EndGods Unity implementation rules. Before implementation, hand off:
-
-- exact screen and player-visible states, including empty, loading, locked, error, and repeat-entry states where relevant
-- player context, primary task, information hierarchy, entry/exit paths, and back behavior
-- keyboard/mouse and controller focus order, destructive-action safeguards, and accessibility requirements
-- data displayed, owning gameplay service, update trigger, and null/ unavailable behavior
-- animation intent, maximum acceptable interaction delay, and reduced-motion alternative
-- approved mockup, `.pen`, per-UI brief, or existing screen used as visual authority
-
-The implementing agent must then use the `UI & UX Design` skill, read `Docs/Pipeline/ui-vibe-coding-pipeline.md`, inspect the real Scene/Prefab and bindings, and produce the required Scene/GameView or PlayMode screenshot evidence. A design recommendation never authorizes runtime construction of final painterly components or replacement of Scene/Prefab layout authority.
-
-For every proposed visual component, classify it as a shared primitive, screen-specific asset, or temporary candidate before recommending new work. Reuse an existing finalized shared primitive first. For Unity handoff, Path A keeps static layout and painterly structure in Scene/Prefab serialization; Path B requires explicit project authority. Runtime `Normalize*` or `Ensure*` repair of static placement is not an acceptable substitute.
-
-## Output Constraints
-
-- Prefer rules, wireframe logic, and implementation notes over lore or branding copy.
-- If the user asks for Unity code or implementation, finish the design handoff and route execution to `UI & UX Design`; do not implement it through this skill.
-- For Unity, mention Canvas grouping, layout hierarchy, safe area handling, event system focus, and prefab reuse where relevant.
-- If proposing animations, keep them short and stateful; avoid long tween chains that slow interaction.
+- For a review, report only concrete player-facing findings in severity order, with exact screen, state, or component evidence where available.
+- For a design decision, record only the states, navigation, feedback, accessibility, data-owner assumptions, and visual authority needed by the implementation.
+- Do not force a separate handoff document or a second planning pass when the user has already approved those decisions.
+- If implementation is requested and material design decisions are settled, route execution to `ui-ux`; this skill itself does not edit Unity Scenes, Prefabs, bindings, or production assets.
+- A design recommendation never authorizes runtime construction of final painterly components, replacement of Scene/Prefab layout authority, or a parallel shared primitive. Classify a genuinely new visual component under the current project ownership gate.
+- Keep the output concise and label unresolved material choices instead of padding it with generic HUD, menu, inventory, shop, or tutorial advice.

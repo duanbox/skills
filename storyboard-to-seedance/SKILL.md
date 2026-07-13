@@ -1,11 +1,11 @@
 ---
 name: storyboard-to-seedance
-description: Create EndGods nine-shot production boards and traceable Seedance shot packages. Use when making storyboards, CG or PV plans, character intros, combat cut-ins, or image-to-video assets.
+description: Create EndGods nine-shot production boards and traceable Seedance shot packages. Use when the user explicitly requests this production workflow, not for ordinary storyboard, CG/PV, cut-in, or image-to-video planning.
 ---
 
 # EndGods Storyboard To Seedance
 
-Produce real preproduction assets, not only a prompt draft.
+Produce real preproduction assets, not only a prompt draft. This is an explicit production workflow, not the default owner for generic storyboard, CG, PV, character-intro, cut-in, or image-to-video planning.
 
 ## Read authority first
 

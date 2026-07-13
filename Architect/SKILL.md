@@ -1,11 +1,11 @@
 ---
 name: Architect
-description: Create implementation-ready EndGods technical plans. Use when the user asks to plan, design, decompose, estimate, or prepare a feature or system change before implementation.
+description: Create an implementation-ready EndGods plan without implementing it. Use when the user explicitly requests a planning-only plan, decomposition, estimate, or execution handoff; not as a gate for implementation work.
 ---
 
 # Architect
 
-Create a closed-loop implementation contract. This skill is planning-only: inspect the repository and produce a plan, but do not edit files, run mutating tools, or start implementation unless the user separately asks to execute it.
+Create a closed-loop implementation contract for an explicitly planning-only request. Inspect the repository and produce the requested plan without editing files or running mutating tools. When the user has already authorized implementation in the same request, do not require a second confirmation or block execution; provide only the minimum useful planning context and continue through the owning implementation workflow instead of treating Architect as a gate.
 
 ## Authority and discovery
 

@@ -1,6 +1,6 @@
 ---
-name: Architecture & Code Structure
-description: Apply EndGods architecture and code-structure rules. Use when changing C# module boundaries, namespaces, dependencies, services, initialization, resources, data ownership, or cross-system contracts.
+name: architecture
+description: Apply EndGods architecture rules. Use when changing a C# module or dependency boundary, service or initialization ownership, data source of truth, or cross-system contract; not for work contained within an existing boundary.
 ---
 
 # Architecture & Code Structure
@@ -23,8 +23,8 @@ Use this skill as a router and execution guardrail. Do not treat distributed ski
 
 ## Workflow
 
-1. Classify the change: ownership, dependency, initialization, data, resource, presentation, or cross-system contract.
-2. Define the closed-loop contract: objective, allowed files, authority documents, checker(s), required evidence, and done condition.
+1. Classify the material boundary change: module ownership, dependency direction, service registration or resolution, initialization owner, data source of truth, or cross-system contract.
+2. For complex, loop-worthy, high-risk, delegated, or cross-system work, define the closed-loop contract: objective, allowed files, authority documents, checker(s), required evidence, and done condition. For bounded changes, use the current AGENTS.md FAST or risk lane and a concise scope; do not create extra contract artifacts merely because this skill is active.
 3. Walk the minimal-correct ladder: reuse the platform, installed dependency, existing service/interface, or current project pattern before adding code.
 4. Keep dependencies explicit. Resolve `ServiceLocator` only at registration, bootstrap, `*Dependencies.cs`, initialization, or test-composition boundaries; cache or inject dependencies for runtime business methods.
 5. Keep gameplay state and rules in C# system layers. Keep UI, animation, Naninovel, and VFX as presentation or orchestration layers.
