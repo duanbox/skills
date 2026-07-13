@@ -39,6 +39,13 @@ Interpret target mode before treating differences as damage. In EndGods, Grok us
 5. Verify with `status`, `doctor`, and `diff`; explain expected merge-mode or local-only results.
 6. Commit and push the source repository only when the user authorizes it or the active project contract explicitly requires an accepted central-source change.
 
+## Updating Skillshare Itself
+
+- The CLI binary and this project-owned thin router are separate assets. For routine CLI upgrades, run `skillshare upgrade --cli --force`, then verify `skillshare version` and re-read the affected command help.
+- Do not run bare `skillshare upgrade` or `skillshare upgrade --skill` against the EndGods global source: both can replace this thin router with the built-in upstream skill.
+- Do not use `skillshare update skillshare` as a substitute; tracked-skill updates and the built-in upgrade path have different ownership semantics.
+- When an upstream skill adds a useful mechanism, inspect its release separately, apply only the needed delta to this source, then run quick validation, sync, status, doctor, and diff before committing and pushing the central source.
+
 ## Safety boundaries
 
 - Do not run an interactive TUI from an agent workflow.

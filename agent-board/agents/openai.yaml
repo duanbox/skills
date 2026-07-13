@@ -1,0 +1,6 @@
+interface:
+  display_name: "Agent Board"
+  short_description: "Explicit durable coordination for EndGods work"
+  default_prompt: "Use $agent-board to create or manage a durable EndGods card for this cross-day, Unity-exclusive, or independent-QA task."
+policy:
+  allow_implicit_invocation: false

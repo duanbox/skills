@@ -20,6 +20,7 @@ Workflow and review:
 - `Architect`
 - `CodeReview`
 - `Debug`
+- `grill-me`
 - `PerformanceOpt`
 - `StoryWeaver`
 - `TechDebt`
@@ -68,6 +69,12 @@ External tooling:
 7. Preserve evidence gates: project lint, Unity recompile and Console, focused tests, importers, screenshots, or media QA as required by risk.
 8. Review external GitHub skills for license, maintenance, project fit, and conflicting assumptions before adopting them. Absorb precise mechanisms instead of installing a broad generic pack when EndGods rules are more specific.
 
+## Explicit workflow invocation
+
+- `CodeReview` alone selects `STANDARD`. Use `$CodeReview DEEP <scope>` or explicitly request a full, deep, or comprehensive review for the broader review matrix.
+- `$grill-me <plan>` is a manual pre-implementation pressure test. It never auto-triggers from risk or ambiguity.
+- `$agent-board <task>` is reserved for cross-day or cross-thread persistence, durable Unity-exclusive resource coordination, or an independent QA evidence record. Ordinary same-session decomposition uses native subagents without cards.
+
 ## Compatibility names
 
 The following frontmatter names are intentionally retained because `Docs/agent_board/skill_registry.md`, role defaults, and existing cards use them:
@@ -94,6 +101,8 @@ $py = 'D:\Project\EndGods\Tools\venv\Scripts\python.exe'
 ```
 
 Run `quick_validate.py` with `PYTHONUTF8=1` on Windows. Treat only the compatibility names above as documented validator exceptions.
+
+The installed Skillshare CLI and the project-owned `skillshare` router have independent update paths. Use `skillshare upgrade --cli --force` for the CLI, re-read the upgraded command help, and adjust this source's thin router only if the live command contract changed. Never run bare `skillshare upgrade` or `skillshare upgrade --skill` against this source because they can overwrite the router with the built-in skill; evaluate useful upstream mechanisms separately and absorb only the needed delta before validating and syncing.
 
 After sync, every target must contain the same 28 shared skill trees. Grok additionally keeps exactly three local-only skills under its merge target: `help`, `imagine`, and `create-skill`; never collect or sync them into this source.
 
