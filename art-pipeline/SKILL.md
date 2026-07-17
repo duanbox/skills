@@ -28,6 +28,7 @@ When documents conflict, follow the more specific current project rule and surfa
 4. Use the built-in `imagegen` skill and image-generation tool for bitmap work. The EndGods model convention is `gpt-image-2`. Do not substitute SVG, Pillow, HTML/CSS, canvas, or procedural drawings for a requested final bitmap.
 5. Place every raw candidate under `ai/...`. Do not write an unreviewed generation directly into `Assets/Game/...`.
 6. Use the deterministic post-processing tool selected by `Docs/rules/rules_assets.md`; do not invent one-off Python when a project tool already owns the operation.
+   - For a circular or irregular progress fill that must sit inside an art groove, follow `Docs/Pipeline/ui-vibe-coding-pipeline.md` §4.5.1. Treat the final groove as the geometry authority; derive the mask and fill template from that exact source geometry, keep one coordinate space, and validate `0% / 1% / 50% / 99% / 100%`. Never generate, eyeball, or nudge the groove, mask, and fill independently.
 7. Perform visual QA before promotion:
    - full silhouette and all borders/corners are present;
    - no clipped head, feet, weapon, ornament, frame, or shadow;
