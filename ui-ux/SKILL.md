@@ -31,15 +31,21 @@ This skill owns authorized EndGods UI implementation. Use `game-ui-designer` onl
 1. Fix the visual authority: approved mockup, `.pen`, per-UI brief, flow-matrix row, or current Scene/Prefab.
 2. For `concept`, stop at the candidate image or mockup; do not write Unity, promote assets, run registry, or start tests.
 3. For `visual trial`, make at most one focused inspection pass, then start real Scene/Prefab writing or report the concrete blocker within the first three tool batches after inspection. Do not spend those batches on tests, contracts, registry, documentation, broad audits, or repeated reads.
-4. Run the ownership gate. Classify each affected element as shared primitive, screen-specific asset, container layout, dynamic zone, or temporary candidate.
-5. For fullscreen menu work, confirm the whole screen contract before editing: background model, content density, detail and action zones, dynamic pools or data regions, reusable shell/header such as `PanelHeader.prefab`, and upper-right exit semantics. Do not treat "add a background" as sufficient when the request is to convert or repair the whole menu experience.
-6. Inspect only the real active Scene hierarchy, inactive objects, Prefab references, controller bindings, and current screenshot needed for the selected stage before editing.
-7. Author static hierarchy, RectTransform geometry, painterly components, list-item shells, layer order, and finalized sprites in Scene/Prefab serialization.
-8. Keep runtime scripts limited to data binding, dynamic content, state, visibility, tooltips, animation, interaction, and reuse of Scene/Prefab-authored pools.
-9. Reuse finalized shared primitives. Do not create a parallel screen-specific replacement without explicit approval.
-10. Use `UIDataAsset` color/layout groups and `TMP_Text`. Do not add runtime `new Color(...)`, legacy `Text`, or hard-coded final styling.
-11. Use LayoutGroups only for outer shells or genuinely dynamic containers. Do not let nested layouts or fixed preferred sizes overwrite painterly Scene-authored geometry.
-12. For generated bitmaps, keep candidates under `ai/...` or `Temp/...`; promote only complete, provenance-recorded, QA-approved assets. Finish with a temporary-asset cleanup classification only when the selected stage reaches finalization or an asset rule requires it.
+4. Before the first `visual trial` Scene/Prefab write, create a compact pre-lock in the working notes or user-visible update; do not create a long-lived document. Include only:
+   - `visual authority priority`: the approved mockup, `.pen`, flow-matrix row, current screenshot, or user reference, in order.
+   - `must preserve`: user-named existing content, layout, data regions, assets, and interactions that must not change.
+   - `must change`: the specific visible target of this trial.
+   - `forbidden moves`: user-named "do not" items, no self-directed alternative layouts, no unrelated screen edits, and no finalization-only work.
+   - `stale exclusions`: obsolete, user-rejected, wrong, or unused assets / Prefabs / styles that must not be reused in this trial.
+5. Run the ownership gate. Classify each affected element as shared primitive, screen-specific asset, container layout, dynamic zone, or temporary candidate.
+6. For fullscreen menu work, confirm the whole screen contract before editing: background model, content density, detail and action zones, dynamic pools or data regions, reusable shell/header such as `PanelHeader.prefab`, and upper-right exit semantics. Do not treat "add a background" as sufficient when the request is to convert or repair the whole menu experience.
+7. Inspect only the real active Scene hierarchy, inactive objects, Prefab references, controller bindings, current screenshot, and pre-lock exclusions needed for the selected stage before editing.
+8. Author static hierarchy, RectTransform geometry, painterly components, list-item shells, layer order, and finalized sprites in Scene/Prefab serialization.
+9. Keep runtime scripts limited to data binding, dynamic content, state, visibility, tooltips, animation, interaction, and reuse of Scene/Prefab-authored pools.
+10. Reuse finalized shared primitives. Do not create a parallel screen-specific replacement without explicit approval.
+11. Use `UIDataAsset` color/layout groups and `TMP_Text`. Do not add runtime `new Color(...)`, legacy `Text`, or hard-coded final styling.
+12. Use LayoutGroups only for outer shells or genuinely dynamic containers. Do not let nested layouts or fixed preferred sizes overwrite painterly Scene-authored geometry.
+13. For generated bitmaps, keep candidates under `ai/...` or `Temp/...`; promote only complete, provenance-recorded, QA-approved assets. Finish with a temporary-asset cleanup classification only when the selected stage reaches finalization or an asset rule requires it.
 
 ## Visual Trial Guardrails
 
@@ -47,6 +53,9 @@ This skill owns authorized EndGods UI implementation. Use `game-ui-designer` onl
 - A targeted screenshot test is allowed when it is the smallest way to obtain the real affected state. Do not turn that into the full harness.
 - If the approved visual authority contains a distinct button, connector, panel, icon, or other screen-specific element, the first real Scene screenshot must use the corresponding reviewed asset. Do not substitute text glyphs, Unity primitives, unrelated existing buttons, diagnostic crops, or placeholder bitmaps and then validate the substitute.
 - If the required asset is missing, create or process that asset first, or report that `visual trial` is blocked on the missing asset.
+- Treat user corrections from the current turn and latest relevant turn as binding inputs to the pre-lock. If a correction says "not this", "keep this", "do not change", or names a required prefab / layout / density, cancel any older direction that conflicts with it before writing.
+- Do not reuse a stale asset or Prefab merely because it is already referenced nearby or matches the object type. If the user flagged it as unused, wrong, old, rejected, "garbage", or unrelated, add it to `stale exclusions`; before any possible reuse, check the exact name or GUID against the current visual authority and active Scene/Prefab references. Presence on disk is not approval to reuse it.
+- `visual trial` may mark stale exclusions and avoid them, but must not delete assets, remove `.meta` files, rewrite promotion manifests, or perform zero-reference cleanup unless the user explicitly asks for cleanup or the task has reached finalization.
 - When the real screenshot is materially wrong, return to the visual authority immediately. Do not update tests, contracts, registry, or baselines to canonize the wrong implementation.
 - If the same UI root receives two material visual corrections, or one correction says the implementation clearly missed the reference, stop the current direction. Re-state the visual authority, existing changed files or Scene roots, current screenshot evidence, and the single next corrective step before continuing.
 
@@ -70,4 +79,4 @@ Classify the verification lane under the selected stage and current `AGENTS.md` 
 
 ## Handoff
 
-Report the screen/state, visual authority, changed ownership or runtime contracts, asset classifications, and only the evidence required by the selected `AGENTS.md` lane. Include pass/fail for user-named visual details. A UI task is not complete while evidence required by that lane is missing or a user-named visual detail is still unaddressed.
+Report the screen/state, visual authority, pre-lock summary when used, changed ownership or runtime contracts, asset classifications, stale exclusions that were avoided, and only the evidence required by the selected `AGENTS.md` lane. Include pass/fail for user-named visual details. A UI task is not complete while evidence required by that lane is missing or a user-named visual detail is still unaddressed.
