@@ -24,21 +24,22 @@ This skill owns authorized EndGods UI implementation. Use `game-ui-designer` onl
    - generators and patch ownership: `Docs/rules/rules_ui_generator.md`
    - bitmap/resource changes: `Docs/rules/rules_assets.md` and `Docs/rules/rules_resources.md`
    - validation: `Docs/rules/rules_testing.md` and `Docs/Knowledge/ui_scene_flow_acceptance_matrix.md`
-5. For a named screen, read its current per-UI brief under `Docs/todo/demo_ui_polish/` and inspect two or three similar Scene/Prefab usages only when the selected stage needs that context.
+5. For a named screen, read its current per-UI brief under `Docs/todo/demo_ui_polish/` when one exists. If no active brief exists, use the relevant `Docs/Knowledge/ui_scene_flow_acceptance_matrix.md` row, current Scene/Prefab, and latest real screenshot or user-provided reference as the visual authority before inspecting similar usages.
 
 ## Implementation Workflow
 
-1. Fix the visual authority: approved mockup, `.pen`, per-UI brief, or current Scene/Prefab.
+1. Fix the visual authority: approved mockup, `.pen`, per-UI brief, flow-matrix row, or current Scene/Prefab.
 2. For `concept`, stop at the candidate image or mockup; do not write Unity, promote assets, run registry, or start tests.
 3. For `visual trial`, make at most one focused inspection pass, then start real Scene/Prefab writing or report the concrete blocker within the first three tool batches after inspection. Do not spend those batches on tests, contracts, registry, documentation, broad audits, or repeated reads.
 4. Run the ownership gate. Classify each affected element as shared primitive, screen-specific asset, container layout, dynamic zone, or temporary candidate.
-5. Inspect only the real active Scene hierarchy, inactive objects, Prefab references, controller bindings, and current screenshot needed for the selected stage before editing.
-6. Author static hierarchy, RectTransform geometry, painterly components, list-item shells, layer order, and finalized sprites in Scene/Prefab serialization.
-7. Keep runtime scripts limited to data binding, dynamic content, state, visibility, tooltips, animation, interaction, and reuse of Scene/Prefab-authored pools.
-8. Reuse finalized shared primitives. Do not create a parallel screen-specific replacement without explicit approval.
-9. Use `UIDataAsset` color/layout groups and `TMP_Text`. Do not add runtime `new Color(...)`, legacy `Text`, or hard-coded final styling.
-10. Use LayoutGroups only for outer shells or genuinely dynamic containers. Do not let nested layouts or fixed preferred sizes overwrite painterly Scene-authored geometry.
-11. For generated bitmaps, keep candidates under `ai/...` or `Temp/...`; promote only complete, provenance-recorded, QA-approved assets. Finish with a temporary-asset cleanup classification only when the selected stage reaches finalization or an asset rule requires it.
+5. For fullscreen menu work, confirm the whole screen contract before editing: background model, content density, detail and action zones, dynamic pools or data regions, reusable shell/header such as `PanelHeader.prefab`, and upper-right exit semantics. Do not treat "add a background" as sufficient when the request is to convert or repair the whole menu experience.
+6. Inspect only the real active Scene hierarchy, inactive objects, Prefab references, controller bindings, and current screenshot needed for the selected stage before editing.
+7. Author static hierarchy, RectTransform geometry, painterly components, list-item shells, layer order, and finalized sprites in Scene/Prefab serialization.
+8. Keep runtime scripts limited to data binding, dynamic content, state, visibility, tooltips, animation, interaction, and reuse of Scene/Prefab-authored pools.
+9. Reuse finalized shared primitives. Do not create a parallel screen-specific replacement without explicit approval.
+10. Use `UIDataAsset` color/layout groups and `TMP_Text`. Do not add runtime `new Color(...)`, legacy `Text`, or hard-coded final styling.
+11. Use LayoutGroups only for outer shells or genuinely dynamic containers. Do not let nested layouts or fixed preferred sizes overwrite painterly Scene-authored geometry.
+12. For generated bitmaps, keep candidates under `ai/...` or `Temp/...`; promote only complete, provenance-recorded, QA-approved assets. Finish with a temporary-asset cleanup classification only when the selected stage reaches finalization or an asset rule requires it.
 
 ## Visual Trial Guardrails
 
@@ -47,6 +48,7 @@ This skill owns authorized EndGods UI implementation. Use `game-ui-designer` onl
 - If the approved visual authority contains a distinct button, connector, panel, icon, or other screen-specific element, the first real Scene screenshot must use the corresponding reviewed asset. Do not substitute text glyphs, Unity primitives, unrelated existing buttons, diagnostic crops, or placeholder bitmaps and then validate the substitute.
 - If the required asset is missing, create or process that asset first, or report that `visual trial` is blocked on the missing asset.
 - When the real screenshot is materially wrong, return to the visual authority immediately. Do not update tests, contracts, registry, or baselines to canonize the wrong implementation.
+- If the same UI root receives two material visual corrections, or one correction says the implementation clearly missed the reference, stop the current direction. Re-state the visual authority, existing changed files or Scene roots, current screenshot evidence, and the single next corrective step before continuing.
 
 ## Forbidden Shortcuts
 
@@ -61,11 +63,11 @@ This skill owns authorized EndGods UI implementation. Use `game-ui-designer` onl
 Classify the verification lane under the selected stage and current `AGENTS.md` before editing. This skill does not add gates beyond the risk that actually entered scope.
 
 - For a `FAST` visual-only Scene/Prefab adjustment, use exactly the minimum evidence currently required by `AGENTS.md`, including the real screenshot requirement. Do not add a formal/full parity report, Unity recompile, Test Runner, `strict-final`, registry regeneration, multi-resolution capture, or matrix update unless its escalation trigger entered scope.
-- For `visual trial`, use the smallest evidence that makes the visual result reviewable: ownership classification, real write, affected-region screenshot, same-region visual comparison, and only the Console/rule scan/compile/safety checks required by the changed artifact.
+- For `visual trial`, use the smallest evidence that makes the visual result reviewable: ownership classification, real write, affected-region screenshot, same-region visual comparison, and only the Console/rule scan/compile/safety checks required by the changed artifact. The same-region comparison must explicitly check user-named details such as connector shape, open or closed borders, icon scale, content density, and exit-control placement.
 - When runtime or Editor code, interaction, visibility, binding, services, async timing, resources, data, or scene flow changes, run only the smallest checks required by the applicable `AGENTS.md` lane and relevant authority.
 - Reserve registry refresh, `strict-final`, formal parity reports, long-lived test or matrix updates, multi-resolution coverage, asset cleanup, and promotion closure for `finalization` or for a specific authority trigger that entered scope.
 - Do not use verification failure as permission to expand scope or restore an obsolete visual value.
 
 ## Handoff
 
-Report the screen/state, visual authority, changed ownership or runtime contracts, asset classifications, and only the evidence required by the selected `AGENTS.md` lane. A UI task is not complete while evidence required by that lane is missing.
+Report the screen/state, visual authority, changed ownership or runtime contracts, asset classifications, and only the evidence required by the selected `AGENTS.md` lane. Include pass/fail for user-named visual details. A UI task is not complete while evidence required by that lane is missing or a user-named visual detail is still unaddressed.
