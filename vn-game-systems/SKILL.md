@@ -41,6 +41,10 @@ When these sources disagree with an old plan or copied rule, follow the current 
 3. Region and node progression is driven by system state and project Commands, not a long chain of cross-region `@goto` calls.
 4. Entry scripts initialize or present the current location; they do not secretly orchestrate the whole mainline.
 5. Changes to story-triggered state must be checked for repeat entry, one-time rewards, save/load, and continue-game behavior.
+6. For multi-day, demo, mainline, or playable-closure work, keep a route ledger before implementation:
+   `DaySlot / entry point / ActionType / output flag or Quest / save checkpoint / Continue expectation / player-visible signal / minimum verification`.
+   Fix only the first failing ledger row unless the user expands scope.
+7. Time-advancing POIs are one contract, not separate UI and time tasks. Define the available-time marker, blocked-time Toast, completed-state priority, repeat-click behavior, single input dispatch path, success checkpoint, and Continue restore expectation together.
 
 ## Workflow
 
@@ -50,6 +54,8 @@ When these sources disagree with an old plan or copied rule, follow the current 
 4. Read two or three current usages before modifying an interface, state field, node type, or bridge.
 5. Use `Tools/Game/Unified Data Importer` for CSV-to-ScriptableObject changes; do not create a side importer.
 6. Keep the change surgical. If it crosses systems or exceeds five files, restate scope and verification before continuing.
+7. When the task is a long playable route, use the route ledger as the work queue. After each blocking fix, restore from the nearest proven checkpoint and rerun the affected row before advancing to the next row.
+8. For checkpoint or Continue work, verify the saved slice, the loaded gameplay mode, the restored location/time, and the first visible screen. Do not treat "load completed" as enough.
 
 ## Verification
 
@@ -60,8 +66,10 @@ Classify verification under the current `AGENTS.md` risk lane and cover only con
 - Save/state changes: test old/default/invalid values and save-load round-trip behavior.
 - Dungeon/inventory/time changes: run the smallest focused system or gameplay-flow test.
 - Naninovel bridge changes: reimport affected scripts, check parse errors, and run the actual handoff flow.
+- `.nani`, Command, CSV/SO, or generated database changes must verify current Unity import products, TypeCache or Command registration, target DB/SO contents, and Console state. Disk text or compiled DLL presence alone is not proof.
+- Test fixtures must not become the bug. For CSV, Scene singletons, `ISaveable`, Scheduler, or generated assets, use project parsers/helpers or structured APIs instead of ad hoc `Split(',')`, static-singleton pollution, or stale acceptance contracts.
 - UI or visible map/dungeon changes: include real Scene/GameView or PlayMode screenshot evidence.
 
 Skip Unity live-state inspection, recompilation, tests, imports, or screenshots whose risk did not enter scope; report the applicable `AGENTS.md` skip reason instead of manufacturing evidence.
 
-Report the authority documents used, state owner, changed contracts, data/import effects, tests and screenshots, and any validation that remains blocked.
+Report the authority documents used, state owner, changed contracts, route-ledger row reached, checkpoint/Continue evidence, data/import effects, Console state, tests and screenshots, any branches covered only by focused contracts rather than full playthrough, and any validation that remains blocked.
