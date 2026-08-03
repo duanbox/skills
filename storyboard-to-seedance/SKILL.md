@@ -61,13 +61,19 @@ Reject or regenerate when any of these fail:
 After the board passes QA:
 
 1. Bind it as the main production-board reference and list every additional character, environment, or prop reference explicitly.
-2. Write one prompt per selected shot unless the current platform contract and project rules justify a short timestamped sequence.
-3. Give each shot one clear subject action and one compatible camera move. State duration, framing, motion delta, continuity invariants, style/LUT, lighting, and forbidden drift.
-4. Respect the current Seedance/Grok limits from `Docs/rules/rules_video.md`; do not preserve stale platform numbers in this skill.
+2. Classify the delivery as either a `single-generation direction test` or a `precision editorial delivery` before compiling prompts.
+3. Treat storyboard timecodes as editorial targets and rhythm cues, not as a guaranteed frame-accurate edit decision list. Never imply that decimal cut points will execute precisely.
+4. For a dense single generation with several sub-second shots, such as nine shots in 6-8 seconds, compress the board into three or four macro narrative phases. Use coarse time ranges only when they help rhythm, keep them explicitly approximate, and let the board control the internal shot language and order. Do not demand nine exact micro-cuts in one generation.
+5. For precision editorial delivery, write one prompt per selected shot, generate each shot at a platform-supported workable duration, and cut the strongest interval to the storyboard target in post. Give each shot one clear subject action and one compatible camera move. State editorial target duration separately from requested generation duration, framing, motion delta, continuity invariants, style/LUT, lighting, and forbidden drift.
+6. When the user asks for one directly usable prompt, return the compact macro-phase prompt first rather than a director-style micro-timeline or shot execution table. Keep reference bindings, narrative progression, start/end anchors, style lock, audio policy, and negative constraints in that single block.
+7. Use first/last-frame references or separate shot generation when an exact reveal, cut, or handoff anchor matters more than single-pass continuity.
+8. Respect the current Seedance/Grok limits from `Docs/rules/rules_video.md`; do not preserve stale platform numbers in this skill.
+
+For single-generation QA, judge macro progression, motif order, visual scale, and start/end anchors. Do not call decimal cut drift a failure when the declared goal is only direction validation. If exact shot retention is required, switch to precision editorial delivery instead of adding more micro-timestamps.
 
 ## Manifest and video QA
 
-For every generated take, create or update the project manifest or same-name JSON sidecar with generation entry, model ID, request/job ID, exact shot prompt, reference paths, requested and actual duration/resolution, aspect ratio, audio presence, raw output path, selection status, and QA result.
+For every generated take, create or update the project manifest or same-name JSON sidecar with generation entry, model ID, request/job ID, exact shot prompt, reference paths, editorial target duration, requested and actual generation duration/resolution, aspect ratio, audio presence, raw output path, selection status, and QA result.
 
 Before selection or Unity delivery:
 
