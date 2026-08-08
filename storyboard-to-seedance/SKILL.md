@@ -32,7 +32,7 @@ video/manifests/            manifests and JSON sidecars
 ## Storyboard generation
 
 1. Normalize the brief: title, purpose, duration, characters, scene, emotional arc, continuity anchors, references, and forbidden elements.
-2. Audit references. A production board controls shot structure and space; separate character/environment references remain authoritative for face, costume, props, and location identity.
+2. Audit references. A production board controls shot structure and space; separate character/environment/prop references remain authoritative for face, costume, props, and location identity. Keep the reference set as small as the shot problem allows; extra unscreened images dilute weighting. If a character has no reliable lock reference, do not invent a clear face. Constrain depiction to silhouette, back view, distance, feet, clothing markers, or key props, and use the approved environment reference as the stronger authority.
 3. Use the built-in `imagegen` skill and image-generation tool. The EndGods model convention is `gpt-image-2`. Do not use Grok Imagine as the storyboard generator.
 4. Generate one real 3840x2160, 16:9 Chinese production board with exactly nine numbered shots. Include readable shot purpose, framing, action, camera move, spatial continuity, lighting/color system, and start/end handoff anchors.
 5. Put these constraints near the start of the image prompt:
@@ -44,6 +44,8 @@ no film grain, no speckling, no gritty random pixel noise, no compression artifa
 
 6. Keep labels short. Forbid random text, watermark, logo, camera equipment, unrelated UI, extra characters, face drift, costume drift, and prop morphing.
 7. Save the board under `video/01_storyboards/` and visually inspect the actual image. Scripts, Pillow, HTML/CSS, SVG, or a layout mock may support diagnosis but cannot replace the final generated bitmap board.
+
+If built-in imagegen returns a network or transport error, report the exact error text. When the user specified a hard stop for that process, stop immediately: do not retry, revise the prompt, switch to Dreamina, use CLI/API or external backends, generate video, or reuse unrelated images. Mark storyboard and visual QA as blocked unless a real generated candidate already exists and is explicitly inspected under the current instruction.
 
 ## Board QA gate
 
@@ -65,9 +67,12 @@ After the board passes QA:
 3. Treat storyboard timecodes as editorial targets and rhythm cues, not as a guaranteed frame-accurate edit decision list. Never imply that decimal cut points will execute precisely.
 4. For a dense single generation with several sub-second shots, such as nine shots in 6-8 seconds, compress the board into three or four macro narrative phases. Use coarse time ranges only when they help rhythm, keep them explicitly approximate, and let the board control the internal shot language and order. Do not demand nine exact micro-cuts in one generation.
 5. For precision editorial delivery, write one prompt per selected shot, generate each shot at a platform-supported workable duration, and cut the strongest interval to the storyboard target in post. Give each shot one clear subject action and one compatible camera move. State editorial target duration separately from requested generation duration, framing, motion delta, continuity invariants, style/LUT, lighting, and forbidden drift.
-6. When the user asks for one directly usable prompt, return the compact macro-phase prompt first rather than a director-style micro-timeline or shot execution table. Keep reference bindings, narrative progression, start/end anchors, style lock, audio policy, and negative constraints in that single block.
+6. When the user asks for one directly usable prompt, return the compact macro-phase prompt first rather than a director-style micro-timeline or shot execution table. If the request says to include the board and references, list upload order, each reference role, and file paths before the prompt. Keep reference bindings, narrative progression, start/end anchors, style lock, audio policy, and negative constraints in that single block.
 7. Use first/last-frame references or separate shot generation when an exact reveal, cut, or handoff anchor matters more than single-pass continuity.
 8. Respect the current Seedance/Grok limits from `Docs/rules/rules_video.md`; do not preserve stale platform numbers in this skill.
+9. For every complete copyable Seedance prompt, count reference bindings, Chinese and English text, punctuation, spaces, and line breaks. The hard limit is 2000 characters; target 1800 or fewer unless the user explicitly accepts a tighter margin. Report the character count with the prompt.
+
+When a repair changes an adjacent-segment handoff object, seal, ticket, causal line, tail environment, or first/last-frame anchor, update the whole affected package together: storyboard panels, reference bindings, direct prompt, manifest or sidecar, and previous/next segment handoff wording. Do not treat a one-line prompt edit as sufficient when the visual authority or downstream handoff semantics changed.
 
 For single-generation QA, judge macro progression, motif order, visual scale, and start/end anchors. Do not call decimal cut drift a failure when the declared goal is only direction validation. If exact shot retention is required, switch to precision editorial delivery instead of adding more micro-timestamps.
 
