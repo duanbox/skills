@@ -35,7 +35,7 @@ If the user gives `video/01/_storyboards`, `video\01\_storyboards`, or another s
 
 1. Normalize the brief: title, purpose, duration, characters, scene, emotional arc, continuity anchors, references, and forbidden elements.
 2. Audit references. A production board controls shot structure and space; separate character/environment/prop references remain authoritative for face, costume, props, and location identity. Keep the reference set as small as the shot problem allows; extra unscreened images dilute weighting. If a character has no reliable lock reference, do not invent a clear face. Constrain depiction to silhouette, back view, distance, feet, clothing markers, or key props, and use the approved environment reference as the stronger authority.
-3. Use the built-in `imagegen` skill and image-generation tool. The EndGods model convention is `gpt-image-2`. Do not use Grok Imagine as the storyboard generator.
+3. Use the built-in `imagegen` skill and image-generation tool. Read the model-target and host-capability table in `Docs/rules/rules_assets.md`; keep the requested target separate from a returned backend ID (`unreported` if absent), and never invent unexposed model/size/quality/mask parameters. Do not use Grok Imagine as the storyboard generator.
 4. Generate one real 3840x2160, 16:9 Chinese production board with exactly nine numbered shots. Include readable shot purpose, framing, action, camera move, spatial continuity, lighting/color system, and start/end handoff anchors.
 5. Put these constraints near the start of the image prompt:
 
@@ -47,18 +47,22 @@ no film grain, no speckling, no gritty random pixel noise, no compression artifa
 6. Keep labels short. Forbid random text, watermark, logo, camera equipment, unrelated UI, extra characters, face drift, costume drift, and prop morphing.
 7. Save the board under `video/01_storyboards/` and visually inspect the actual image. Scripts, Pillow, HTML/CSS, SVG, or a layout mock may support diagnosis but cannot replace the final generated bitmap board.
 
-If built-in imagegen returns a network or transport error, report the exact error text. When the user specified a hard stop for that process, stop immediately: do not retry, revise the prompt, switch to Dreamina, use CLI/API or external backends, generate video, or reuse unrelated images. Mark storyboard and visual QA as blocked unless a real generated candidate already exists and is explicitly inspected under the current instruction.
+For an explicitly requested local repair, use the approved whole board as one edit base and identify the target panel/change plus the other panels, grid, Chinese labels, and identity locks to preserve. Recheck the whole board after editing. Return to the approved base if edits drift; improved model preservation is not pixel-identical proof. Keep video generation settings governed by the video rules, independently of the image-model target.
+
+If built-in imagegen returns a network or transport error, report the exact error text and stop immediately: do not retry, revise the prompt, switch to Dreamina, use CLI/API or external backends, generate video, or reuse unrelated images. Mark storyboard and visual QA as blocked unless a real generated candidate already exists and is explicitly inspected under the current instruction.
 
 ## Board QA gate
 
 Reject or regenerate when any of these fail:
 
-- exactly nine legible, correctly numbered shots are present;
+- decoded output is actually 3840x2160, with exactly nine legible, correctly numbered shots in a strict 3x3 grid; a prompt or filename is not dimension evidence;
 - each shot has a distinct narrative, composition, action, or emotional function;
 - Chinese labels are short and readable at normal viewing size;
 - faces, hairstyles, costumes, weapons, props, scene layout, palette, and lighting remain coherent;
 - entrances, screen direction, spatial relationships, and shot handoffs are understandable;
 - no film grain, random noise, watermark, stray text, equipment, extra character, cropped grid, or missing edge is visible.
+
+If the source is smaller, report the size gap and keep it a candidate. Any explicitly approved processing must retain original dimensions and transforms in provenance; never label resizing or super-resolution as native 4K. A compressed video-upload copy is not the review master.
 
 ## Seedance shot package
 

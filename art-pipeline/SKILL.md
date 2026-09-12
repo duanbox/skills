@@ -25,9 +25,10 @@ When documents conflict, follow the more specific current project rule and surfa
 3. Decide generation versus edit:
    - Default to a fresh redraw or regeneration for style unification, quality replacement, or Grok-era bitmap replacement.
    - Edit the original only when the user explicitly requests retouching, local adjustment, or preservation of the original composition.
-4. Use the built-in `imagegen` skill and image-generation tool for bitmap work. The EndGods model convention is `gpt-image-2`. Do not substitute SVG, Pillow, HTML/CSS, canvas, or procedural drawings for a requested final bitmap.
+   - For an authorized edit, inspect one explicit edit base, assign each supporting reference a role, and name the target region plus invariants. Compare changed and unchanged regions; a preservation prompt is not proof of pixel-identical output. Follow `Docs/sop/ai_asset_promotion.md` for drift or exact-compositing requirements.
+4. Use the built-in `imagegen` skill and image-generation tool for bitmap work. Follow the model-target and host-capability table in `Docs/rules/rules_assets.md`; do not hardcode the native backend or invent unexposed model, size, quality, or mask arguments. Do not substitute SVG, Pillow, HTML/CSS, canvas, or procedural drawings for a requested final bitmap. On a native-tool network error, report the exact error and stop; do not switch channels or request API keys without authorization.
 5. Place every raw candidate under `ai/...`. Do not write an unreviewed generation directly into `Assets/Game/...`.
-6. Use the deterministic post-processing tool selected by `Docs/rules/rules_assets.md`; do not invent one-off Python when a project tool already owns the operation.
+6. Decode source dimensions and alpha before selecting necessary processing from `Docs/rules/rules_assets.md`. Skip background removal when native alpha passes light/dark/checker-background QA, and skip super-resolution when the source can fit without enlargement. Keep intentional luma/chroma workflows intact. Do not invent one-off Python when a project tool already owns the operation.
    - For a circular or irregular progress fill that must sit inside an art groove, follow `Docs/Pipeline/ui-vibe-coding-pipeline.md` §4.5.1. Treat the final groove as the geometry authority; derive the mask and fill template from that exact source geometry, keep one coordinate space, and validate `0% / 1% / 50% / 99% / 100%`. Never generate, eyeball, or nudge the groove, mask, and fill independently.
 7. Perform visual QA before promotion:
    - full silhouette and all borders/corners are present;
@@ -35,10 +36,10 @@ When documents conflict, follow the more specific current project rule and surfa
    - alpha edges are clean when transparency is required;
    - no random text, watermark, logo, baked mock UI, or unrequested characters;
    - style, palette, composition, intended small-size readability, and reference identity match the authority;
-   - for `gpt-image-2` or other AI bitmap outputs, inspect quiet surfaces and gradients at 100% and 200% for model-signature noise, isolated short strokes, pepper dots, stray ink fibers, smeared micro-lines, or repeated texture units;
+   - for AI bitmap outputs, inspect quiet surfaces and gradients at 100% and 200% for model-signature noise, isolated short strokes, pepper dots, stray ink fibers, smeared micro-lines, or repeated texture units;
    - for replacements, canvas size, aspect ratio, crop, pivot-sensitive silhouette, and target in-game footprint match the existing finalized asset unless the user explicitly approved a layout change;
    - compare the real output visually, not only its dimensions or file existence.
-8. Record provenance before promotion: source path, tool/model, prompt or source reference, intended component, QA status, and promotion reason.
+8. Record provenance in the existing brief/manifest per the promotion SOP: distinguish requested model from returned model (`unreported` if absent), source dimensions from processed dimensions, and native alpha from extraction. Include any edit base, reference roles, transforms, and preserved-region QA. Do not relabel historical assets or call an upscaled image native high resolution.
 9. Promote only approved outputs to `Assets/Game/...`, preserve required `.meta` files and serialized references, and verify the Unity importer or affected screen as required by the project rules.
 10. For map region/background replacements, verify the final in-engine display path, not only the source image:
    - capture the real Scene/GameView state the player or editor workflow depends on;
