@@ -29,6 +29,8 @@ video/06_final/             local delivery candidates
 video/manifests/            manifests and JSON sidecars
 ```
 
+If the user gives `video/01/_storyboards`, `video\01\_storyboards`, or another split-directory variant, first check the real `video/01_storyboards/` directory and report the corrected path. Do not regenerate, move, or rename storyboards until the actual disk inventory proves the asset is missing.
+
 ## Storyboard generation
 
 1. Normalize the brief: title, purpose, duration, characters, scene, emotional arc, continuity anchors, references, and forbidden elements.
@@ -64,17 +66,30 @@ After the board passes QA:
 
 1. Bind it as the main production-board reference and list every additional character, environment, or prop reference explicitly.
 2. Classify the delivery as either a `single-generation direction test` or a `precision editorial delivery` before compiling prompts.
-3. Treat storyboard timecodes as editorial targets and rhythm cues, not as a guaranteed frame-accurate edit decision list. Never imply that decimal cut points will execute precisely.
-4. For a dense single generation with several sub-second shots, such as nine shots in 6-8 seconds, compress the board into three or four macro narrative phases. Use coarse time ranges only when they help rhythm, keep them explicitly approximate, and let the board control the internal shot language and order. Do not demand nine exact micro-cuts in one generation.
-5. For precision editorial delivery, write one prompt per selected shot, generate each shot at a platform-supported workable duration, and cut the strongest interval to the storyboard target in post. Give each shot one clear subject action and one compatible camera move. State editorial target duration separately from requested generation duration, framing, motion delta, continuity invariants, style/LUT, lighting, and forbidden drift.
-6. When the user asks for one directly usable prompt, return the compact macro-phase prompt first rather than a director-style micro-timeline or shot execution table. If the request says to include the board and references, list upload order, each reference role, and file paths before the prompt. Keep reference bindings, narrative progression, start/end anchors, style lock, audio policy, and negative constraints in that single block.
-7. Use first/last-frame references or separate shot generation when an exact reveal, cut, or handoff anchor matters more than single-pass continuity.
-8. Respect the current Seedance/Grok limits from `Docs/rules/rules_video.md`; do not preserve stale platform numbers in this skill.
-9. For every complete copyable Seedance prompt, count reference bindings, Chinese and English text, punctuation, spaces, and line breaks. The hard limit is 2000 characters; target 1800 or fewer unless the user explicitly accepts a tighter margin. Report the character count with the prompt.
+3. Resolve every storyboard reference slot to a real file before writing the copyable prompt. A logical slot such as "route reference", "mechanism core", or "compass resonance" is not a valid binding until it has an absolute path, a single role, and an inherit/exclude statement. If no dedicated file exists, state the closest authority that will carry the role, such as a specific board panel or character lock reference, and explain why unrelated icons, UI crops, or low-confidence assets were not used.
+4. Do not use a low-resolution or incidental crop as a strong prop lock. If a prop must drive identity, scale, or a close-up and the only available image is too small or ambiguous, either create a purpose-built high-resolution reference through the art pipeline or mark the slot as compensated by the board or character lock. Do not silently upscale weak evidence into an authority.
+5. For combat cut-ins or videos that hand directly into gameplay, preflight the downstream state before prompt writing: read the nearest `.nani` trigger, spawn or encounter data, and any demo plan entry that defines enemy count, battle handoff, quest start, or tail-frame contract. The final prompt must match that state. A pre-battle cut-in should end on a stable "battle will trigger now" frame, not on continued escape, remote observation, victory, or unresolved suspense when the next command starts combat.
+6. Treat storyboard timecodes as editorial targets and rhythm cues, not as a guaranteed frame-accurate edit decision list. Never imply that decimal cut points will execute precisely.
+7. For a dense single generation with several sub-second shots, such as nine shots in 6-8 seconds, compress the board into three or four macro narrative phases. Use coarse time ranges only when they help rhythm, keep them explicitly approximate, and let the board control the internal shot language and order. Do not demand nine exact micro-cuts in one generation.
+8. For precision editorial delivery, write one prompt per selected shot, generate each shot at a platform-supported workable duration, and cut the strongest interval to the storyboard target in post. Give each shot one clear subject action and one compatible camera move. State editorial target duration separately from requested generation duration, framing, motion delta, continuity invariants, style/LUT, lighting, and forbidden drift.
+9. When the user asks for one directly usable prompt, return the compact macro-phase prompt first rather than a director-style micro-timeline or shot execution table. If the request says to include the board and references, list upload order, each reference role, and file paths before the prompt. Keep reference bindings, narrative progression, start/end anchors, style lock, audio policy, and negative constraints in that single block.
+10. Use first/last-frame references or separate shot generation when an exact reveal, cut, or handoff anchor matters more than single-pass continuity.
+11. Respect the current Seedance/Grok limits from `Docs/rules/rules_video.md`; do not preserve stale platform numbers in this skill.
+12. For every complete copyable Seedance prompt, count reference bindings, Chinese and English text, punctuation, spaces, and line breaks. The hard limit is 2000 characters; target 1800 or fewer unless the user explicitly accepts a tighter margin. Report the character count with the prompt.
 
 When a repair changes an adjacent-segment handoff object, seal, ticket, causal line, tail environment, or first/last-frame anchor, update the whole affected package together: storyboard panels, reference bindings, direct prompt, manifest or sidecar, and previous/next segment handoff wording. Do not treat a one-line prompt edit as sufficient when the visual authority or downstream handoff semantics changed.
 
 For single-generation QA, judge macro progression, motif order, visual scale, and start/end anchors. Do not call decimal cut drift a failure when the declared goal is only direction validation. If exact shot retention is required, switch to precision editorial delivery instead of adding more micro-timestamps.
+
+## Character highlight test takes
+
+For character intro, entrance, or "high point" test videos, design the action around a visible decision and consequence:
+
+```text
+external pressure -> active decision -> world or relationship changes -> stable result frame
+```
+
+Do not let breathing, slow walking, turning back, looking at the camera, idle posing, or passive power buildup carry the core action. The prompt must name the pressure, the physical decision, the visible result, and the tail-frame state. Push the decisive action early enough that the take has time to show its consequence; if the key moment appears only in the final seconds, treat it as a repair target. Add role-specific safety and count constraints when relevant, such as exact mask count, no extra bodies, full-coverage costume, no sexualized framing, or "all restraints are broken before the final form appears."
 
 ## Manifest and video QA
 
@@ -85,6 +100,8 @@ Before selection or Unity delivery:
 - run `ffprobe` on the actual MP4 for codec, dimensions, frame rate, duration, aspect ratio, audio stream, and size;
 - extract beginning, middle, and end frames and build a contact sheet;
 - visually inspect the contact sheet for identity drift, composition failure, malformed props, text, flicker, and handoff continuity;
+- for character highlight takes, verify decisive-action timing, cause-and-effect readability, exact object or enemy counts, costume and safety constraints, and whether the final frame fully resolves the stated result;
+- for combat cut-ins, verify that enemy count, threat distance, player posture, and final-frame state can hand directly into the actual combat command without implying escape, victory, or an extra dialogue beat;
 - move only selected takes through `04_selected`, `05_post`, and `06_final`;
 - promote to `Assets/Game/Art/Video/` only after the video rules' encoding, naming, final-frame, Naninovel/Inspector, and QA gates pass.
 
