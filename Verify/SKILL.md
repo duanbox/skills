@@ -37,6 +37,10 @@ Use the applicable gates, not a generic build ritual:
 - Story: Naninovel import, identifiers, variables, commands, focused flow when runtime behavior changed
 - Low-risk mechanical changes: use the replacement checks required by AGENTS.md and report the permitted test skip explicitly; recompile only when the changed file type or risk requires it
 
+### Major Unity or package migration signoff
+
+Use this gate only when the user asks whether a major Editor, engine, or package migration is complete or ready for continued development. Define the representative project flow and the expected warning/error baseline before testing. Collect fresh, separately attributable evidence for package resolution and import, Unity compilation and Editor Console, the applicable project rule scan and focused tests, a Player build and its report, and a continuous Player run through the representative main flow including save and Continue when those are in scope. Inspect the Player runtime log and exit log as separate evidence. Name branches, platforms, or paths that were not exercised. A segmented smoke run does not stand in for the continuous flow.
+
 Unity Test Runner is single-owner. If a job is queued or running, poll it to terminal state before starting another.
 
 ## Truth rules
@@ -47,6 +51,9 @@ Unity Test Runner is single-owner. If a job is queued or running, poll it to ter
 - Re-run required evidence in the current verification pass.
 - A test must protect intent and should fail when the protected rule is broken.
 - Do not mark missing tools or screenshots as PASS.
+- For a migration signoff, a compile, test, build, or single-event PASS proves only its own gate. If a later continuous run exposes a blocker, revise the earlier overall readiness claim and report the blocker before claiming the migration complete.
+- Keep runtime Console findings, build report findings, and exit-log hints distinct. Label a confirmed stale or unrelated log entry as residual only with its source and time; do not count it as a current runtime warning or silently discard it.
+- After a package upgrade, record observed API or command drift in the migration result. Propose a central skill change only after the affected flow has been verified and the source edit is authorized.
 
 ## Failure handling
 
@@ -63,3 +70,5 @@ For every required gate, report:
 - Skip reason and residual risk
 
 Conclude with Verified, Should work, or Skipped / blocked. Claim completion only when every required gate has fresh passing evidence.
+
+For a major Unity or package migration, state the highest level actually supported: `Compile clean`, `Editor clean`, `Build clean`, `Player flow clean`, or `Migration ready`. The levels are cumulative; `Migration ready` requires every applicable signoff gate above to pass and an explicit list of untested scope or residual findings. Do not use a lower level as shorthand for full migration completion.
