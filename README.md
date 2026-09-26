@@ -1,17 +1,17 @@
-# EndGods Skillshare Source
+﻿# EndGods Skillshare Source
 
 This directory is the single global source for EndGods skills distributed by skillshare. Edit skills here, not in target directories such as `.codex/skills`, `.claude/skills`, or `.cursor/skills`.
 
 ## Current baseline
 
-- skillshare CLI: `v0.20.21`
+- skillshare CLI: machine-local; use `skillshare version` (Windows setup verified with `v0.21.8`)
 - `skillshare` skill: project-owned thin router; command syntax comes from live CLI `--help`
 - shared skills: 28
 - targets: antigravity, claude, codex, cursor, gemini, grok, kilocode, opencode, trae
 - target mode: copy, except grok uses merge
 - project rules and workflows are separate extras; they are not skills
 
-The repository authority remains `D:\Project\EndGods\AGENTS.md` and `Docs/INDEX.md`. A distributed skill should route to current project documents and tools instead of copying large sections that will drift.
+The repository authority is `AGENTS.md` and `Docs/INDEX.md` in the active EndGods checkout; resolve its root on the current machine rather than assuming a drive letter. A distributed skill should route to current project documents and tools instead of copying large sections that will drift.
 
 ## Inventory
 
@@ -90,7 +90,7 @@ Use the project Python environment for the OpenAI quick validator and the instal
 
 ```powershell
 $ss = 'C:\Users\duanb\AppData\Local\Programs\skillshare\skillshare.exe'
-$py = 'D:\Project\EndGods\Tools\venv\Scripts\python.exe'
+$py = Join-Path (Get-Location).Path 'Tools/venv/Scripts/python.exe' # Run from the active EndGods checkout
 
 & $ss analyze --global --json
 & $ss audit --global --threshold high --format json --yes
@@ -104,10 +104,16 @@ Run `quick_validate.py` with `PYTHONUTF8=1` on Windows. Treat only the compatibi
 
 The installed Skillshare CLI and the project-owned `skillshare` router have independent update paths. Use `skillshare upgrade --cli --force` for the CLI, re-read the upgraded command help, and adjust this source's thin router only if the live command contract changed. Never run bare `skillshare upgrade` or `skillshare upgrade --skill` against this source because they can overwrite the router with the built-in skill; evaluate useful upstream mechanisms separately and absorb only the needed delta before validating and syncing.
 
-After sync, every target must contain the same 28 shared skill trees. Grok additionally keeps exactly three local-only skills under its merge target: `help`, `imagine`, and `create-skill`; never collect or sync them into this source.
+After sync, every target must contain the same 28 shared skill trees. Where installed by Grok, additionally preserve these local-only skills under its merge target: `help`, `imagine`, and `create-skill`; never collect or sync them into this source.
 
 Grok-local skills are outside this repository. Never collect them into the central source or include them in public commits.
 
 ## Extras boundary
 
-`EndGods_rules` and `EndGods_workflows` are managed under the skillshare extras source. If an extras target contains newer project-owned content, collect or reconcile it back to the extras source before syncing. Never overwrite the newer repository copy merely to make the status green.
+`EndGods_rules` is managed under the skillshare extras source; its project copy is versioned in EndGods. The retired `EndGods_workflows` extra must not be recreated. If an extras target contains newer project-owned content, collect or reconcile it back to the extras source before syncing. Never overwrite the newer repository copy merely to make the status green.
+
+## Cross-machine Git workflow
+
+This checkout tracks https://github.com/duanbox/skills. EndGods authorizes completed skill improvements to be synced, verified, committed, and pushed in the same task. Edit this source, inspect the diff, stage only task-owned files, and push to the configured upstream without force. Keep unrelated local changes intact. Report the commit and any push failure; local distribution alone is not a successful GitHub sync.
+
+On another configured machine, use `skillshare pull` from a clean source to pull and distribute. On a fresh Windows machine, clone this repository to `%APPDATA%/skillshare/skills`, install Skillshare, configure targets with `init --no-copy --no-git --no-skill`, then sync. Do not import stale target copies over the cloned source. Store target configuration and machine paths outside this repository.
