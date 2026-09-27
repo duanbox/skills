@@ -6,7 +6,7 @@ This directory is the single global source for EndGods skills distributed by ski
 
 - skillshare CLI: machine-local; use `skillshare version` (Windows setup verified with `v0.21.8`)
 - `skillshare` skill: project-owned thin router; command syntax comes from live CLI `--help`
-- shared skills: 28
+- shared skills: 27
 - targets: antigravity, claude, codex, cursor, gemini, grok, kilocode, opencode, trae
 - target mode: copy, except grok uses merge
 - project rules and workflows are separate extras; they are not skills
@@ -25,7 +25,6 @@ Workflow and review:
 - `StoryWeaver`
 - `TechDebt`
 - `Verify`
-- `agent-board`
 - `content-coverage-audit`
 - `interactive-narrative-review`
 - `narrative-consistency-review`
@@ -73,16 +72,15 @@ External tooling:
 
 - `CodeReview` alone selects `STANDARD`. Use `$CodeReview DEEP <scope>` or explicitly request a full, deep, or comprehensive review for the broader review matrix.
 - `$grill-me <plan>` is a manual pre-implementation pressure test. It never auto-triggers from risk or ambiguity.
-- `$agent-board <task>` is reserved for cross-day or cross-thread persistence, durable Unity-exclusive resource coordination, or an independent QA evidence record. Ordinary same-session decomposition uses native subagents without cards.
 
 ## Compatibility names
 
-The following frontmatter names are intentionally retained because `Docs/agent_board/skill_registry.md`, role defaults, and existing cards use them:
+The following frontmatter names are intentionally retained for compatibility with existing project instructions and explicit skill invocations:
 
 - `Architect`, `CodeReview`, `Debug`, `PerformanceOpt`, `StoryWeaver`, `TechDebt`, `Verify`
 - `VN Game Systems`
 
-They are known exceptions to the lowercase hyphen-case recommendation. Rename them only as an explicit migration that updates the Agent Board registry, roles, prompts, and cards together. `unity-animation` has already been normalized because it had no such dependency.
+They are known exceptions to the lowercase hyphen-case recommendation. Rename them only as an explicit migration that updates their project references and callers together. `unity-animation` has already been normalized because it had no such dependency.
 
 ## Validation and distribution
 
@@ -104,7 +102,7 @@ Run `quick_validate.py` with `PYTHONUTF8=1` on Windows. Treat only the compatibi
 
 The installed Skillshare CLI and the project-owned `skillshare` router have independent update paths. Use `skillshare upgrade --cli --force` for the CLI, re-read the upgraded command help, and adjust this source's thin router only if the live command contract changed. Never run bare `skillshare upgrade` or `skillshare upgrade --skill` against this source because they can overwrite the router with the built-in skill; evaluate useful upstream mechanisms separately and absorb only the needed delta before validating and syncing.
 
-After sync, every target must contain the same 28 shared skill trees. Where installed by Grok, additionally preserve these local-only skills under its merge target: `help`, `imagine`, and `create-skill`; never collect or sync them into this source.
+After sync, every target must contain the same 27 shared skill trees. Where installed by Grok, additionally preserve these local-only skills under its merge target: `help`, `imagine`, and `create-skill`; never collect or sync them into this source.
 
 Grok-local skills are outside this repository. Never collect them into the central source or include them in public commits.
 
