@@ -1,11 +1,13 @@
 ﻿---
 name: ui-ux
-description: Implement and verify EndGods UI under Scene and Prefab authority. Use when changing UI Scenes, Prefabs, generators, bindings, layout, styling, navigation, visibility, assets, or scene flow.
+description: Supporting EndGods UI implementation and verification guidance under Scene and Prefab authority. Prefer the official Unity ui-ugui skill for Canvas/uGUI technical guidance; use this skill for project context when changing UI Scenes, Prefabs, generators, bindings, layout, styling, navigation, visibility, assets, or scene flow.
 ---
 
 # UI & UX Design
 
-This skill owns authorized EndGods UI implementation. Use `game-ui-designer` only when material player-experience, information-hierarchy, navigation, or onboarding decisions remain unresolved; a bounded task with an approved design authority may enter this workflow directly.
+For Canvas/uGUI work, prefer the installed official Unity `ui-ugui` skill (`unity:ui-ugui` when plugin-qualified) as the first technical reference, with this skill providing supporting EndGods context. For an existing UI Toolkit or IMGUI task, the corresponding official framework skill is the better fit; this preference does not imply a framework migration.
+
+EndGods authorities still own Scene/Prefab layout, project contracts, assets, and acceptance. Use `game-ui-designer` only when material player-experience, information-hierarchy, navigation, or onboarding decisions remain unresolved; a bounded task with an approved design authority may enter implementation directly.
 
 ## Required Routing
 
@@ -80,3 +82,7 @@ Classify the verification lane under the selected stage and current `AGENTS.md` 
 ## Handoff
 
 Report the screen/state, visual authority, pre-lock summary when used, changed ownership or runtime contracts, asset classifications, stale exclusions that were avoided, and only the evidence required by the selected `AGENTS.md` lane. Include pass/fail for user-named visual details. A UI task is not complete while evidence required by that lane is missing or a user-named visual detail is still unaddressed.
+
+## Optional References
+
+[Unity UI and UX reference ideas](references/unity-ui-ux.md) collects the official and community sources reviewed for this project. Consult it when a layout, interaction, or UX question would benefit from another perspective; the ideas can be adapted or skipped. It adds no required reading, fixed sequence, validation gate, or automatic skill/tool installation.
