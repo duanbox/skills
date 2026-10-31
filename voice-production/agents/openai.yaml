@@ -1,0 +1,4 @@
+﻿interface:
+  display_name: "角色配音与校对"
+  short_description: "固定角色声线，创建中文对白，定位语气与读音问题并完成局部重录和游戏接入"
+  default_prompt: "使用 $voice-production 处理这批角色对白，沿用已保存的声线，先定位问题并提供局部重录候选，再按已授权范围接回游戏。"
