@@ -10,12 +10,9 @@ Build the feedback loop before changing the implementation. A diagnosis request 
 ## Authority and live state
 
 1. Read AGENTS.md and use Docs/INDEX.md to locate the subsystem rules.
-2. Read Docs/rules/unitymcp.md before Unity MCP work and the relevant testing or subsystem authority.
-3. Start from live Unity state when available:
-   - get_console_logs without unnecessary stack traces
-   - get_scene_info
-   - get_gameobject for the relevant object, including inactive hierarchy checks where needed
-4. Use LastUnityError.txt only when live MCP evidence is unavailable or insufficient. Treat it as stale until corroborated.
+2. Read Docs/rules/unitymcp.md before Unity Editor tooling and the relevant testing or subsystem authority. Use the installed official unity-cli skill for command/API mechanics; this skill owns diagnosis and project constraints.
+3. Start from live Console, loaded Scene, and the relevant object's state, including inactive hierarchy checks where needed. Follow Docs/rules/unitymcp.md: verified official CLI commands first, community MCP for project-verified specialist flows or fallback. Discover the live schema and pass the actual project path; do not treat a lookup miss as proof of absence.
+4. Use LastUnityError.txt only when live Unity evidence is unavailable or insufficient. Treat it as stale until corroborated.
 5. Inspect recent diffs and two or three working examples before proposing a pattern change.
 
 ## Root-cause loop
@@ -46,9 +43,9 @@ When a fix is explicitly requested:
 For modified runtime C#:
 
 1. Run Tools/venv/Scripts/python.exe Tools/lint/check_project_rules.py.
-2. Trigger Unity MCP recompile_scripts.
-3. Read get_console_logs and resolve non-expected errors or warnings.
-4. Run the smallest relevant EditMode or PlayMode test when behavior or serialized/runtime contracts changed.
+2. Follow the one-compile-request and recovery contract in AGENTS.md and Docs/rules/unitymcp.md: select one verified CLI or MCP transport, then read its terminal status; never trigger both.
+3. Read current Console and report every non-expected error or warning. Fix only task-owned failures within the authorized scope.
+4. Use the smallest relevant flow or focused test when behavior or serialized/runtime contracts changed; do not start TestRunner solely because code changed.
 5. Capture the affected screen or state when UI is involved.
 
 For data, assets, scenes, prefabs, or Naninovel changes, run the matching importer, reference, screenshot, or scenario validation required by AGENTS.md.

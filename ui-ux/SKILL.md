@@ -1,88 +1,40 @@
 ﻿---
 name: ui-ux
-description: Supporting EndGods UI implementation and verification guidance under Scene and Prefab authority. Prefer the official Unity ui-ugui skill for Canvas/uGUI technical guidance; use this skill for project context when changing UI Scenes, Prefabs, generators, bindings, layout, styling, navigation, visibility, assets, or scene flow.
+description: Route EndGods UI implementation under project Scene/Prefab and UI Toolkit authority. Use for project constraints, assets, bindings, navigation, or visible-state acceptance; installed official Unity framework skills own API/tool guidance.
 ---
 
-# UI & UX Design
+# EndGods UI Implementation
 
-For Canvas/uGUI work, prefer the installed official Unity `ui-ugui` skill (`unity:ui-ugui` when plugin-qualified) as the first technical reference, with this skill providing supporting EndGods context. For an existing UI Toolkit or IMGUI task, the corresponding official framework skill is the better fit; this preference does not imply a framework migration.
+This is a project router, not a second Unity UI manual. The installed official Unity plugin owns current framework and tool mechanics; EndGods authorities own visual targets, architecture, assets, persistence, and acceptance.
 
-EndGods authorities still own Scene/Prefab layout, project contracts, assets, and acceptance. Use `game-ui-designer` only when material player-experience, information-hierarchy, navigation, or onboarding decisions remain unresolved; a bounded task with an approved design authority may enter implementation directly.
+If a target client lacks the official skill, use current official documentation and live tool help within project rules; report any remaining capability gap. Do not copy another client's plugin cache or install dependencies automatically.
 
-## Required Routing
+## Select only the needed authority
 
-1. Read `AGENTS.md` and the UI routes in `Docs/INDEX.md`.
-2. Read `Docs/Pipeline/ui-vibe-coding-pipeline.md` first.
-3. Run the stage gate before deeper reads or planning. Classify the current user intent as `concept`, `FAST`, `visual trial`, `behavior`, or `finalization`; leaving `FAST` only upgrades to the narrowest stage that satisfies the current request.
-   - `concept`: deliver only candidate images or mockups plus minimal candidate QA.
-   - `visual trial`: deliver the smallest reversible Scene/Prefab implementation, a real affected-region screenshot, and same-region comparison against the approved visual authority.
-   - `behavior`: add the smallest runtime or flow evidence for interaction, visibility, binding, services, async timing, resources, data, or scene flow that entered scope.
-   - `finalization`: run the one-time asset, contract, cleanup, registry, parity, matrix, and signoff work after the user accepts the real in-game visual result or explicitly asks to finalize.
-4. Load only the task-relevant authorities:
-   - UI path A/B and Scene ownership: `Docs/rules/rules_ui.md`
-   - visual language and primitives: `Docs/rules/rules_ui_guide.md`
-   - colors and tokens: `Docs/rules/rules_uicolor.md`
-   - sorting and Canvas layers: `Docs/rules/rules_uilayer.md`
-   - generators and patch ownership: `Docs/rules/rules_ui_generator.md`
-   - bitmap/resource changes: `Docs/rules/rules_assets.md` and `Docs/rules/rules_resources.md`
-   - validation: `Docs/rules/rules_testing.md` and `Docs/Knowledge/ui_scene_flow_acceptance_matrix.md`
-5. For a named screen, read its current per-UI brief under `Docs/todo/demo_ui_polish/` when one exists. If no active brief exists, use the relevant `Docs/Knowledge/ui_scene_flow_acceptance_matrix.md` row, current Scene/Prefab, and latest real screenshot or user-provided reference as the visual authority before inspecting similar usages.
+1. Read AGENTS.md and select the current lane. FAST does not load this skill, Docs/INDEX.md, or a harness as an extra gate.
+2. For escalated UI work, use Docs/INDEX.md to locate Docs/Pipeline/ui-vibe-coding-pipeline.md and the affected screen authority. Select concept, visual trial, behavior, or finalization from the current request.
+3. Before UI design or edits, read Docs/Knowledge/fonts.md and map affected text roles to its scenario-specific font/weight/display-size guidance; TMP technical checks use Docs/Knowledge/TMP.md.
+4. Detect the target's actual framework and assets. Consult the installed official ui-ugui, ui-uitk, or ui-imgui skill only for that framework's mechanics. An installed skill or generic new-project recipe does not authorize migration.
+5. Read only risk-owned rules: rules_ui.md for structure/ownership; rules_ui_guide.md for visual primitives; rules_uicolor.md for tokens; rules_uilayer.md for sorting; rules_ui_generator.md for generator work; rules_assets.md and rules_resources.md for bitmap/resource changes; the UI flow acceptance matrix and testing rules only when their contract enters scope.
+6. Use Docs/rules/unitymcp.md for Editor routing, live schema, explicit project path, connection recovery, global transitions, and one-compile-request semantics. Official CLI is the default when verified; community MCP retains specialist/fallback flows. Do not copy command recipes here.
 
-## Implementation Workflow
+## Project constraints
 
-1. Fix the visual authority: approved mockup, `.pen`, per-UI brief, flow-matrix row, or current Scene/Prefab.
-2. For `concept`, stop at the candidate image or mockup; do not write Unity, promote assets, run registry, or start tests.
-3. For `visual trial`, make at most one focused inspection pass, then start real Scene/Prefab writing or report the concrete blocker within the first three tool batches after inspection. Do not spend those batches on tests, contracts, registry, documentation, broad audits, or repeated reads.
-4. Before the first `visual trial` Scene/Prefab write, create a compact pre-lock in the working notes or user-visible update; do not create a long-lived document. Include only:
-   - `visual authority priority`: the approved mockup, `.pen`, flow-matrix row, current screenshot, or user reference, in order.
-   - `must preserve`: user-named existing content, layout, data regions, assets, and interactions that must not change.
-   - `must change`: the specific visible target of this trial.
-   - `forbidden moves`: user-named "do not" items, no self-directed alternative layouts, no unrelated screen edits, and no finalization-only work.
-   - `stale exclusions`: obsolete, user-rejected, wrong, or unused assets / Prefabs / styles that must not be reused in this trial.
-5. Run the ownership gate. Classify each affected element as shared primitive, screen-specific asset, container layout, dynamic zone, or temporary candidate.
-6. For fullscreen menu work, confirm the whole screen contract before editing: background model, content density, detail and action zones, dynamic pools or data regions, reusable shell/header such as `PanelHeader.prefab`, and upper-right exit semantics. Do not treat "add a background" as sufficient when the request is to convert or repair the whole menu experience.
-7. Inspect only the real active Scene hierarchy, inactive objects, Prefab references, controller bindings, current screenshot, and pre-lock exclusions needed for the selected stage before editing.
-8. Author static hierarchy, RectTransform geometry, painterly components, list-item shells, layer order, and finalized sprites in Scene/Prefab serialization.
-9. Keep runtime scripts limited to data binding, dynamic content, state, visibility, tooltips, animation, interaction, and reuse of Scene/Prefab-authored pools.
-10. Reuse finalized shared primitives. Do not create a parallel screen-specific replacement without explicit approval.
-11. Use `UIDataAsset` color/layout groups and `TMP_Text`. Do not add runtime `new Color(...)`, legacy `Text`, or hard-coded final styling.
-12. Use LayoutGroups only for outer shells or genuinely dynamic containers. Do not let nested layouts or fixed preferred sizes overwrite painterly Scene-authored geometry.
-13. For generated bitmaps, keep candidates under `ai/...` or `Temp/...`; promote only complete, provenance-recorded, QA-approved assets. Finish with a temporary-asset cleanup classification only when the selected stage reaches finalization or an asset rule requires it.
+- Use game-ui-designer only for unresolved player-experience decisions; an approved design enters implementation directly.
+- Fix the visual authority before writing: approved image, .pen, current per-UI brief, acceptance-matrix row, or current screen. Preserve real data density, dynamic pools, actions, and exit semantics.
+- Follow the pipeline's short visual loop and current AGENTS.md inspection budget. When a compact pre-lock is needed, record the visual authority, must-preserve/must-change items, forbidden moves, and user-rejected stale assets in working notes, not a new permanent document.
+- Static uGUI hierarchy, geometry, painterly components, sprites, and pools remain Scene/Prefab-authored; UI Toolkit uses the owning UXML/USS and project contracts. Runtime binds content/state/visibility/interaction/animation, without constructing final painterly UI or repairing authored layout.
+- Reuse finalized shared primitives and classify new components. Runtime UI uses UIDataAsset tokens; text uses the project's TMP or existing UI Toolkit authority. Do not replace an approved distinct bitmap with glyphs, primitives, crops, or unrelated assets.
+- For generic official examples, project GameLogger, UniTask, dependency approval, art channel/provenance, and save safety still apply. New-project placeholder, camera, palette, or auto-install defaults are not instructions to rewrite this existing project.
+- Do not load craft-game-floors or new-unity-project for routine EndGods repairs. They are scoped references only when the user actually requests the corresponding new-game/prototype work.
+- Keep concept, art handoff, Scene/framework implementation, and verification sequential. Do not stack owning skills or add finalization bookkeeping to an unapproved visual trial.
 
-## Visual Trial Guardrails
+## Verify and hand off
 
-- `concept` and `visual trial` use at most one owning skill. Do not spawn subagents, load multiple owning skills, update long-lived tests/contracts/docs, regenerate registry, run `strict-final`, collect a resolution matrix, or complete final asset-promotion bookkeeping before visual approval unless a hard safety or traceability rule makes that exact step necessary.
-- A targeted screenshot test is allowed when it is the smallest way to obtain the real affected state. Do not turn that into the full harness.
-- If the approved visual authority contains a distinct button, connector, panel, icon, or other screen-specific element, the first real Scene screenshot must use the corresponding reviewed asset. Do not substitute text glyphs, Unity primitives, unrelated existing buttons, diagnostic crops, or placeholder bitmaps and then validate the substitute.
-- If the required asset is missing, create or process that asset first, or report that `visual trial` is blocked on the missing asset.
-- Treat user corrections from the current turn and latest relevant turn as binding inputs to the pre-lock. If a correction says "not this", "keep this", "do not change", or names a required prefab / layout / density, cancel any older direction that conflicts with it before writing.
-- Do not reuse a stale asset or Prefab merely because it is already referenced nearby or matches the object type. If the user flagged it as unused, wrong, old, rejected, "garbage", or unrelated, add it to `stale exclusions`; before any possible reuse, check the exact name or GUID against the current visual authority and active Scene/Prefab references. Presence on disk is not approval to reuse it.
-- `visual trial` may mark stale exclusions and avoid them, but must not delete assets, remove `.meta` files, rewrite promotion manifests, or perform zero-reference cleanup unless the user explicitly asks for cleanup or the task has reached finalization.
-- When the real screenshot is materially wrong, return to the visual authority immediately. Do not update tests, contracts, registry, or baselines to canonize the wrong implementation.
-- If the same UI root receives two material visual corrections, or one correction says the implementation clearly missed the reference, stop the current direction. Re-state the visual authority, existing changed files or Scene roots, current screenshot evidence, and the single next corrective step before continuing.
+Use exactly the current AGENTS.md lane and the owning pipeline's selected stage. Visual changes require the real affected-state image and comparison with the approved target; API success, node existence, compile, and lint are not visual proof. TestRunner, full harness, registry, matrices, multi-resolution evidence, and final asset cleanup require their actual trigger.
 
-## Forbidden Shortcuts
+Persistent EndGods.unity writes retain the read-only TMP persistence/Scene safety audit. Preserve unrelated changes and do not adjust tests or baselines to accept an incorrect visual result.
 
-- Do not construct final painterly components or list items with runtime `new GameObject`.
-- Do not normalize broken scale, anchors, parents, or Canvas state at runtime.
-- Do not replace Scene/Prefab authority with a generator loop after visual signoff.
-- Do not treat a flattened mock image, editor-only preview, or compile success as runtime proof.
-- Do not use a generic web or generic Unity UI skill to override EndGods Scene/Prefab rules.
+Report the changed screen/state, authority, task-owned files, user-named details, evidence and skips as Verified, Should work, or Skipped / blocked. Stop at the authorized stage.
 
-## Verification
-
-Classify the verification lane under the selected stage and current `AGENTS.md` before editing. This skill does not add gates beyond the risk that actually entered scope.
-
-- For a `FAST` visual-only Scene/Prefab adjustment, use exactly the minimum evidence currently required by `AGENTS.md`, including the real screenshot requirement. Do not add a formal/full parity report, Unity recompile, Test Runner, `strict-final`, registry regeneration, multi-resolution capture, or matrix update unless its escalation trigger entered scope.
-- For `visual trial`, use the smallest evidence that makes the visual result reviewable: ownership classification, real write, affected-region screenshot, same-region visual comparison, and only the Console/rule scan/compile/safety checks required by the changed artifact. The same-region comparison must explicitly check user-named details such as connector shape, open or closed borders, icon scale, content density, and exit-control placement.
-- When runtime or Editor code, interaction, visibility, binding, services, async timing, resources, data, or scene flow changes, run only the smallest checks required by the applicable `AGENTS.md` lane and relevant authority.
-- Reserve registry refresh, `strict-final`, formal parity reports, long-lived test or matrix updates, multi-resolution coverage, asset cleanup, and promotion closure for `finalization` or for a specific authority trigger that entered scope.
-- Do not use verification failure as permission to expand scope or restore an obsolete visual value.
-
-## Handoff
-
-Report the screen/state, visual authority, pre-lock summary when used, changed ownership or runtime contracts, asset classifications, stale exclusions that were avoided, and only the evidence required by the selected `AGENTS.md` lane. Include pass/fail for user-named visual details. A UI task is not complete while evidence required by that lane is missing or a user-named visual detail is still unaddressed.
-
-## Optional References
-
-[Unity UI and UX reference ideas](references/unity-ui-ux.md) collects the official and community sources reviewed for this project. Consult it when a layout, interaction, or UX question would benefit from another perspective; the ideas can be adapted or skipped. It adds no required reading, fixed sequence, validation gate, or automatic skill/tool installation.
+Optional references/unity-ui-ux.md provides ideas only; it adds no mandatory reading, installation, framework choice, or gate.

@@ -24,7 +24,7 @@ Use this skill as a router and execution guardrail. Do not treat distributed ski
 ## Workflow
 
 1. Classify the material boundary change: module ownership, dependency direction, service registration or resolution, initialization owner, data source of truth, or cross-system contract.
-2. For complex, loop-worthy, high-risk, delegated, or cross-system work, define the closed-loop contract: objective, allowed files, authority documents, checker(s), required evidence, and done condition. For bounded changes, use the current AGENTS.md FAST or risk lane and a concise scope; do not create extra contract artifacts merely because this skill is active.
+2. Define scope and the pass/fail signal proportionally to the current AGENTS.md lane. Cross-system or delegated work alone does not enable Tools/ai_eval, receipts, or a full harness; use those only when explicitly requested or required by the owning complex/high-risk/release/independent-QA contract.
 3. Walk the minimal-correct ladder: reuse the platform, installed dependency, existing service/interface, or current project pattern before adding code.
 4. Keep dependencies explicit. Resolve `ServiceLocator` only at registration, bootstrap, `*Dependencies.cs`, initialization, or test-composition boundaries; cache or inject dependencies for runtime business methods.
 5. Keep gameplay state and rules in C# system layers. Keep UI, animation, Naninovel, and VFX as presentation or orchestration layers.
@@ -37,9 +37,9 @@ For bugs, establish the observable failure before changing architecture. Capture
 
 ## Verification
 
-- Always run `Tools/venv/Scripts/python.exe Tools/lint/check_project_rules.py`.
-- For runtime C# changes, recompile through Unity MCP and read Console warnings/errors.
-- Run the smallest relevant EditMode or PlayMode test when behavior, serialization, services, async timing, resources, or scene flow changes.
+- Apply the current AGENTS.md lane: escalated work runs `Tools/venv/Scripts/python.exe Tools/lint/check_project_rules.py`; FAST gets only its scoped checks and does not load this skill as an extra gate.
+- For Unity API/tool mechanics, use the relevant installed official Unity skill and Docs/rules/unitymcp.md. Compile-relevant C# gets one compile request through the selected verified CLI or MCP transport, terminal status, and Console; do not trigger both.
+- Use the smallest intent-protecting flow or focused test when behavior, serialization, services, async timing, resources, or scene flow changes; TestRunner is not automatic.
 - For low-risk mechanical changes, report `Skipped / low-risk mechanical change` and name the replacement checks.
 - Report each result as `Verified`, `Should work`, or `Skipped / blocked`; do not call incomplete evidence done.
 

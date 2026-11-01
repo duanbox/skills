@@ -10,7 +10,7 @@ Measure first. A request to analyze or profile is read-only; edit code or projec
 ## Authority and benchmark contract
 
 1. Read AGENTS.md, Docs/INDEX.md, Docs/Knowledge/performance_baseline.md, and the relevant subsystem rules.
-2. Read Docs/rules/unitymcp.md and Docs/rules/rules_testing.md before editor validation.
+2. Read Docs/rules/unitymcp.md for Editor validation and Docs/rules/rules_testing.md when tests are involved. Use installed official Unity skills for the affected API/tool mechanics; retain this skill's measurement and EndGods evidence contract.
 3. Define target platform and hardware, Unity Editor versus player build, scene or save, exact reproduction route, quality settings, warm-up, sample duration, and target budget.
 4. Record existing profiler captures, player logs, screenshots, or benchmark numbers. Keep confidence low when evidence is thin.
 
@@ -41,7 +41,7 @@ When optimization is explicitly requested:
 
 - Capture before and after metrics on the same route and target.
 - Run the project rule scan.
-- For runtime C# changes, run Unity MCP recompile_scripts and inspect get_console_logs.
+- For compile-relevant C# changes, follow AGENTS.md and Docs/rules/unitymcp.md: one compile request via the selected verified CLI or MCP transport, its terminal status, then current Console. Never compile through both transports.
 - Run the smallest focused behavior or performance regression check required by the change.
 - Verify no new memory growth, visual regression, loading failure, or gameplay change.
 - Report editor-only evidence as editor-only; do not generalize it to target hardware.
