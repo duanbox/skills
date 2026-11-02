@@ -21,6 +21,7 @@ If a target client lacks the official skill, use current official documentation 
 ## Project constraints
 
 - Use game-ui-designer only for unresolved player-experience decisions; an approved design enters implementation directly.
+- For new screens, important component redesigns, or aesthetic polish, consult the [agreed UI reference method](../game-ui-designer/references/art-direction-and-references.md). Preserve the fixed sources and reference-to-EndGods translation; reuse settled references for small iterations. Unresolved art direction belongs to game-ui-designer, while an approved direction proceeds here without a second design gate.
 - Fix the visual authority before writing: approved image, .pen, current per-UI brief, acceptance-matrix row, or current screen. Preserve real data density, dynamic pools, actions, and exit semantics.
 - Follow the pipeline's short visual loop and current AGENTS.md inspection budget. When a compact pre-lock is needed, record the visual authority, must-preserve/must-change items, forbidden moves, and user-rejected stale assets in working notes, not a new permanent document.
 - Static uGUI hierarchy, geometry, painterly components, sprites, and pools remain Scene/Prefab-authored; UI Toolkit uses the owning UXML/USS and project contracts. Runtime binds content/state/visibility/interaction/animation, without constructing final painterly UI or repairing authored layout.

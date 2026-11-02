@@ -1,24 +1,26 @@
----
+﻿---
 name: game-ui-designer
-description: Resolve EndGods player-facing UI decisions. Use when hierarchy, flow, navigation, accessibility, feedback, onboarding, or visible states remain unsettled; not as a gate for approved Unity implementation.
+description: Resolve EndGods UI art direction, aesthetic polish, reference selection, hierarchy, navigation, feedback, and visible states. Use when a screen feels unfinished or its player experience remains unsettled; not as a gate for approved Unity implementation.
 ---
 
 # Game UI Designer
 
 ## Ownership
 
-This skill owns unresolved EndGods player-experience decisions: information hierarchy, player-visible states, navigation and focus, feedback, accessibility, onboarding, and economy clarity. It does not own Unity Scene/Prefab implementation, bitmap production, gameplay-system logic, or generic UI design education.
+This skill owns unresolved EndGods visual and player-experience decisions: art direction, reference selection, composition, typography roles, visual detail, information hierarchy, player-visible states, navigation and focus, feedback, accessibility, onboarding, and economy clarity. It does not own Unity Scene/Prefab implementation, bitmap production, gameplay-system logic, or generic UI design education.
 
 Do not require this skill as a serial prerequisite for `ui-ux`. If the target screen, visual authority, and player-visible behavior are already approved, enter the implementation workflow directly.
 
 ## Authority gate
 
 1. Read `AGENTS.md`, then use the UI routes in `Docs/INDEX.md`.
-2. Read `Docs/Pipeline/ui-vibe-coding-pipeline.md`, `Docs/rules/rules_ui.md`, and the affected screen brief only when the task needs those authorities.
+2. Before visual design, read `Docs/Knowledge/fonts.md` and map affected text roles to its current font, weight, and actual display-size guidance. Use `DESIGN.md`, `Docs/rules/rules_ui_guide.md`, the UI pipeline, and the affected screen brief only for the decision they own; respect proposed versus approved evidence.
 3. When bitmap ownership, provenance, import, or promotion is in scope, also read `Docs/rules/rules_assets.md` and `Docs/rules/rules_resources.md`.
 4. Inspect the current player-visible screen, flow, states, and available evidence before proposing a replacement.
 
 Use the optional files under `references/` only when one directly answers the current task; do not load a generic HUD, menu, shop, or tutorial checklist by default.
+
+For a new screen, important component redesign, or aesthetic polish, use [the agreed reference and art-direction method](references/art-direction-and-references.md). This preserves the user's fixed sources: Beautiful UI, beUI, Rare UI, Transitions.dev, shadcn/ui, and Dribbble. Reuse an already inspected, still-relevant reference during the same iteration; a small approved adjustment does not restart research.
 
 ## Design workflow
 
@@ -28,6 +30,8 @@ Use the optional files under `references/` only when one directly answers the cu
 4. Identify the data shown and its existing gameplay owner without inventing a new service, binding, asset, or runtime contract.
 5. Resolve discoverable facts from the repository. State only assumptions that can materially change the design.
 6. Keep the answer proportional: a bounded review may need a few decisions, not a mandatory multi-section design document.
+
+When the request is aesthetic, connect each proposed change to visible evidence: the current problem, the inspected reference detail, and its EndGods treatment. Judge hierarchy, typography, spacing, material restraint, state distinction, and motion together. A website list, more ornament, or a successful framework migration alone does not establish visual quality.
 
 ## Review and handoff
 

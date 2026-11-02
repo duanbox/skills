@@ -1,4 +1,4 @@
-interface:
+﻿interface:
   display_name: "Game UI Designer"
-  short_description: "Resolve EndGods player-experience UI decisions"
-  default_prompt: "Use $game-ui-designer when EndGods UI hierarchy, flow, navigation, accessibility, feedback, or player-visible states remain unresolved; do not use it as a prerequisite for an approved implementation."
+  short_description: "EndGods UI art direction, polish, and player experience"
+  default_prompt: "Use $game-ui-designer to refine EndGods UI art direction and visible details using the agreed reference sources, or resolve hierarchy, navigation, feedback, and player-visible states. Preserve approved visual authority; do not restart design for an approved implementation."
